@@ -1,0 +1,21 @@
+28
+1 Blasto_Strike fire
+2 Space_Out memory_loss
+3 Bubble_Beam bubble
+4 Wacky_Dreams memory_loss
+5 Dog_Stretch bubble
+6 Not_Ice_Blast fire
+7 Blush fire
+8 Adopted_By_Dogs memory_loss
+9 Cloud_Dream memory_loss
+10 Lovely_Day memory_loss
+11 Smile bubble
+12 Sunshine fire
+13 Lucky_One bubble
+14 Music_To_Me fire
+15 Strong_Swing fire
+16 Winning_Day memory_loss
+17 Preliminary_Black_Out memory_loss
+18 Exploratory_Maneuver bubble
+19 Beginning_Blast fire
+20 Introductory_Levitation bubble
