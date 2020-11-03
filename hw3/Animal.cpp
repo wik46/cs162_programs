@@ -141,24 +141,13 @@ float Animal::earn_revenue(unsigned int bonus) const{
  * Output: The neccesary output is displayed to the user.
  * **************************************************************************************/
 std::ostream& operator<<(std::ostream& stream_out, const Animal& a){
-	stream_out << std::setfill(' ') << std::setw(15)
-	<< std::setprecision(3) << std::left;
-	stream_out << a.m_id_number << ' ' << a.m_name << ' ' << a.m_type << ' '; 
+	stream_out << std::setfill(' ')
+	<< std::setprecision(3) << std::setw(1); 
+	stream_out << '|'<< a.m_id_number << "" << a.m_name << ' ' << a.m_type << ' '; 
 	stream_out << a.m_age_months  << " " <<  a.m_birth_date << ' ' << a.m_place_of_birth 
 	<< '.' << std::endl;
 	return stream_out;
 }
-
-/* ***************************************************************************************
- * Function name: Animal()
- * Description: This is the default constructor. It is mainly used to create the element
- * 		when no user input is desired. You will be able to set values, but
- * 		it can also take in no arguments.
- * Parameters: Still need to list them.
- * Input: Depends on the user's whishes.
- * Output: An instance of an animal is created.
- * **************************************************************************************/
-
 
 
 /* ***************************************************************************************

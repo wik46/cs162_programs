@@ -48,7 +48,7 @@ void Date::add_month(){
 void Date::print_fnumeric() const{
 	std::cout << m_month << "/"
 	<< m_day << "/"
-	<< m_year << std::endl;
+	<< m_year ;
 	return;
 }
 
@@ -70,7 +70,7 @@ void Date::print_fstr() const{
 std::ostream& operator<<(std::ostream& stream_out, const Date& d){
 	// Format: dd/mmm/yyyy
 	stream_out << d.m_month_names[d.m_month - 1]
-	<< ", " << d.m_day << ", " << d.m_year << std::endl;
+	<< ", " << d.m_day << ", " << d.m_year ;
 	return stream_out;
 }
 
