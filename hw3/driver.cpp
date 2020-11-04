@@ -57,10 +57,11 @@ int main(){
 	Animal a("zoo", current);
 	Zoo z;
 	++z;
+	
 	Animal* dynamic = new Animal("zoo",current);
 	Animal* dynamic1 = new Animal("zoo",current);
-	z.m_all_animals[0] = dynamic;
-	z.m_all_animals[1] = dynamic1;
+	z[0] = dynamic;
+	z[1] = dynamic1;
 	std::cout << z << std::endl;
 
 	// All these classes inherit from Animal.
@@ -70,19 +71,15 @@ int main(){
 	++z;	
 	++z;	
 	++z;	
-	z.m_all_animals[2] = bear;
-	z.m_all_animals[3] = sea_lion;
-	z.m_all_animals[4] = tiger;
+	z[2] = bear;
+	z[3] = sea_lion;
+	z[4] = tiger;
+
+	for(int i = 0; i < z.get_num_animals(); i++){
+		std::cout << *(z[i]) << std::endl;
+	}	
 	
 	
-	
-	std::cout << (z.m_all_animals[0])->m_place_of_birth << std::endl;
-	std::cin >> a.m_cost;
-	std::cin >> a.m_perc_rev;
-	a.m_birth_date.print_fnumeric();
-	std::cout << a << std::endl;
-		
-	std::cout << Animal::m_total_animals << std::endl;
 	Probability p;
 	p.increase();
 	p.increase();

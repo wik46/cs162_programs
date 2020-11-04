@@ -1,18 +1,22 @@
 /* **************************************************************************************
  * Filename: Zoo.cpp
  * Author: Lodewyk Jansen van Rensburg.
- * Description: This is the file for my Animal class. This class will be frequently used.
+ * Description: This file contains the Zoo class. The zoo will start out with
+ * 		one empty cage. The user starts out with no animals in the Zoo
+ * 		and gets a chance each round to buy at most two animals of the same
+ * 		species. This will be handelled by the Auction() methos defined in
+ * 		the class. 
  * 
  *
  * **************************************************************************************/
 
-// ======
-// Note that if using tis class.
-// ======
+// =======================================================================================
+// Note that if using this class.
+// =======================================================================================
 //  - The destructor will free non-NULL memory. Therefore
 //  	you need to store Animal* allocated on the heap
 //  	in the zoo.
-
+// ---------------------------------------------------------------------------------------
 #include "Animal.h"
 #include "Date.h"
 #include "Zoo.h"
@@ -21,6 +25,39 @@
 #include <cassert>
 #include <iomanip>
 #include <iostream>
+
+/* ***************************************************************************************
+ * Function name: get_num_animals().
+ * Description: This function will be used to return the number of animals to the zoo.
+ * 		It is a constant function and will not change any variables.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the current size of the Zoo.
+ * **************************************************************************************/
+int Zoo::get_num_animals() const{
+	return m_num_animals;
+}
+
+/* ***************************************************************************************
+ * Function name: operator[]().
+ * Description: This function will return a reference to an Animal* becuase
+ * 		I don't know which inhereted class will be needed by the program.
+ * Parameters: int.
+ * Pre-conditions: Assumes that there are animals in the Zoo but the function
+ * 		   will use assert to determine it.
+ * Post-conditions: The subscript operator returns a reference to the
+ * 		    Animal* at the index specified.
+ * **************************************************************************************/
+Animal*& Zoo::operator[](int i){
+	assert(i >= 0 
+	&& "[operator[]()]: The Zoo does not have negative indices");
+	// The program should not try to access an animal that is not there.
+	//assert(m_all_animals[i] = NULL 
+	//&& "[operator[]()]: There is no animal at the index you specified.");
+	// m_all_animals is an array of Animal*. Therefore by deferencing the
+	// pointer, the function returns a reference to the instance of an Animal.
+	return m_all_animals[i];
+}
 
 /* ***************************************************************************************
  * Function name: operator++().
@@ -57,14 +94,16 @@ Zoo& Zoo::operator++(){
  * Output: All the information currently avalable regarding the Zoo is printed to the 
  * 		screen.
  * **************************************************************************************/
-std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){
-	stream_out << std::setfill(' ') 
-	<< std::setprecision(3) << std::left;
+std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){ 
+	stream_out << std::setprecision(3) << std::left;
 	stream_out << std::endl;
 	stream_out << "-------------------------------------------------------------------" 
 	<< std::endl;
-	stream_out << "| Id-number | Name | Type | Age | Date of purchase | Born in Zoo? |"	
-	<< std::endl;
+	stream_out << std::setw(12) << "| Id-number" 
+	<< std::setw(7) << "Name " << 
+	std::setw(7) << "Type"<< std::setw(7) << "Age" <<
+	std::setw(17) << "Date of Purchase" <<
+	std::setw(15)<< "Birth Place |" << std::endl;
 	stream_out << "-------------------------------------------------------------------" 
 	<< std::endl;
 	for(int i = 0; i < zoo.m_num_animals; i++){

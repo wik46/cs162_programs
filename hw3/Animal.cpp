@@ -18,7 +18,14 @@
  *		- 	Each specie gives birth to a set number of babies.
  * **************************************************************************************/
 
+// Note on naming convention for this class.
+// _________________________________________
+// The member variables are prefixed with an m_ and the same getter function
+// used to get the value of that member variable the m_ is replaced with get_
+
+
 #include "Animal.h"
+#include "Date.h"
 #include <assert.h>
 
 #include <iomanip>
@@ -26,6 +33,121 @@
 
 int Animal::m_total_animals{0};
 
+/* ***************************************************************************************
+ * Function name: get_name().
+ * Description: This function is used to get access of the m_name member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_name.
+ * **************************************************************************************/
+std::string Animal::get_name() const {
+	return m_name;
+}
+/* ***************************************************************************************
+ * Function name: get_id_number().
+ * Description: This function is used to get access of the m_id_number member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_id_number.
+ * **************************************************************************************/
+int Animal::get_id_number() const {
+	// This will be a unique id. It will be based on the order at which the player
+	// brought the animal to the zoo or when they were born.
+	return m_id_number;
+}
+/* ***************************************************************************************
+ * Function name: get_type().
+ * Description: This function is used to get access of the m_type member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_type.
+ * **************************************************************************************/
+std::string Animal::get_type() const {
+	// This will be so that I know which type the animal is.
+	return m_type;
+}
+/* ***************************************************************************************
+ * Function name: get_age_months().
+ * Description: This function is used to get access of the m_age_months member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_age_months.
+ * **************************************************************************************/
+int Animal::get_age_months() const {
+	// This will represent the age of the animal (in months.)
+	return m_age_months;
+}
+/* ***************************************************************************************
+ * Function name: get_place_of_birth().
+ * Description: This function is used to get access of the m_place_of_birth member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_place_of_birth.
+ * **************************************************************************************/
+const std::string Animal::get_place_of_birth() const {
+	// This string variable will tell me if the animal was born in the zoo.
+	// It will be either "zoo" or "other".
+	return m_place_of_birth;
+}
+/* ***************************************************************************************
+ * Function name: get_birth_date().
+ * Description: This function is used to get access of the m_birth_date member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_birth_date.
+ * **************************************************************************************/
+// +====== Test this one =========+  //
+const Date& Animal::get_birth_date() const {
+	// This variable will be the date of birth of the animal if it was
+	// born in the zoo.
+	return m_birth_date; 
+}
+/* ***************************************************************************************
+ * Function name: get_max_babies().
+ * Description: This function is used to get access of the m_max_babies member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_max_babies.
+ * **************************************************************************************/
+int Animal::get_max_babies() const {
+	return m_max_babies;
+}
+/* ***************************************************************************************
+ * Function name: get_cost().
+ * Description: This function is used to get access of the m_cost member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_cost.
+ * **************************************************************************************/
+int Animal::get_cost() const {
+	// This will be the intial cost of the type of animal.
+	return m_cost;
+}
+/* ***************************************************************************************
+ * Function name: get_food_cost_mult().
+ * Description: This function is used to get access of the m_food_cost_mult member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_food_cost_mult.
+ * **************************************************************************************/
+int Animal::get_food_cost_mult() const{
+	// This will help me calculate the food cost for the type of animal.
+	// Bear - x3 monthly food cost, Sea Lion - base food cost, and
+	// Tiger - x5 monthly base food cost.
+	return m_food_cost_mult;
+}
+/* ***************************************************************************************
+ * Function name: get_perc_rev().
+ * Description: This function is used to get access of the m_perc_rev member variable.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_perc_rev.
+ * **************************************************************************************/
+float Animal::get_perc_rev() const{
+	// This variable will help me calculate the the revenue earned per animal
+	// of the class.
+	return m_perc_rev;
+}
 /* ***************************************************************************************
  * Function name: is_baby().
  * Description: This function will tell me if the instance of an Animal is a baby.
@@ -141,11 +263,13 @@ float Animal::earn_revenue(unsigned int bonus) const{
  * Output: The neccesary output is displayed to the user.
  * **************************************************************************************/
 std::ostream& operator<<(std::ostream& stream_out, const Animal& a){
-	stream_out << std::setfill(' ')
-	<< std::setprecision(3) << std::setw(1); 
-	stream_out << '|'<< a.m_id_number << "" << a.m_name << ' ' << a.m_type << ' '; 
-	stream_out << a.m_age_months  << " " <<  a.m_birth_date << ' ' << a.m_place_of_birth 
-	<< '.' << std::endl;
+	stream_out << std::left;
+	stream_out << std::setprecision(3); 
+	stream_out << std::setw(12) << a.m_id_number  
+	<< std::setw(7) << a.m_name << 
+	std::setw(7) << a.m_type << std::setw(7) << a.m_age_months <<
+	std::setw(17) << a.m_birth_date <<
+	std::setw(17)<< a.m_place_of_birth;
 	return stream_out;
 }
 

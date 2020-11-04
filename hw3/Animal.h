@@ -62,6 +62,32 @@ public:
 	// of the class.
 	float m_perc_rev;
 public:
+	// Accessor functions.
+	std::string get_name()const;
+	
+	int get_id_number() const;
+	
+	std::string get_type() const;
+	
+	int get_age_months() const;
+	
+	const std::string get_place_of_birth() const;
+	
+	const Date& get_birth_date() const; 
+	
+	int get_max_babies() const ;
+	
+	int get_cost() const;
+	// This will help me calculate the food cost for the type of animal.
+	// Bear - x3 monthly food cost, Sea Lion - base food cost, and
+	// Tiger - x5 monthly base food cost.
+	int get_food_cost_mult() const ;
+	
+	float get_perc_rev() const;
+
+	// These functions are things that the animal can do or can happen
+	// to an instance of an animal.
+	
 	// This function will tell me if the Animal is a baby.
 	bool is_baby() const;
 	// This function will tell me if the animal is an adult.

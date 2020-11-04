@@ -29,6 +29,14 @@ public:
 	// We use an array of Animal*.
 	Animal** m_all_animals;
 	int m_num_animals;
+public:
+	// This function will be used to get the number of animals
+	// in the Zoo.
+	int get_num_animals() const;
+	// This subscript operator overload will return the animal at the index
+	// passed in as argument.
+	// Note that this returns an animal reference.
+	Animal*& operator[](int);
 	// This will increase the number of cages in the Zoo by 1.
 	Zoo& operator++();
 	// This function will be used to print all the animals in the Zoo.

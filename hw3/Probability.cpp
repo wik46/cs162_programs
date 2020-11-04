@@ -100,8 +100,8 @@ void Probability::decrease(){
  * Output: An instance of a Probability class is constructed. 
  * **************************************************************************************/
 
- Probability::Probability(int e_name0, int e_name1, int e_name2, int e_name3)
-:m_prob0{1}, m_prob1{1}, m_prob2{1}, m_prob3{1}, 
+Probability::Probability(int e_name0, int e_name1, int e_name2, int e_name3)
+ :m_prob0{1}, m_prob1{1}, m_prob2{1}, m_prob3{1}, 
  // setting the names of the events.
  m_event0{e_name0}, m_event1{e_name1}, m_event2{e_name2}, m_event3{e_name3}
 ,	// 1/4 is the probability of an event occuring at the start.
