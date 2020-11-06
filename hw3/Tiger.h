@@ -22,8 +22,8 @@ protected:
 
 public:
 	// The constructor.
-	Tiger(const char* where, Date when): Animal(where, when)
-	{}
+	Tiger(const char* where, Date when);
+	
 
 };
 #endif

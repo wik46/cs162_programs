@@ -266,8 +266,8 @@ std::ostream& operator<<(std::ostream& stream_out, const Animal& a){
 	stream_out << std::left;
 	stream_out << std::setprecision(3); 
 	stream_out << std::setw(12) << a.m_id_number  
-	<< std::setw(7) << a.m_name << 
-	std::setw(7) << a.m_type << std::setw(7) << a.m_age_months <<
+	<< std::setw(12) << a.m_name << 
+	std::setw(12) << a.m_type << std::setw(7) << a.m_age_months <<
 	std::setw(17) << a.m_birth_date <<
 	std::setw(17)<< a.m_place_of_birth;
 	return stream_out;

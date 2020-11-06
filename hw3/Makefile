@@ -16,8 +16,8 @@ GXXFLAGS = -std=c++11 -g
 
 # Targets.
 
-$(EXE_FILE): driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Zoo.o
-	$(GXX) $(GXXFLAGS) driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Zoo.o -o $(EXE_FILE)
+$(EXE_FILE): driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o 
+	$(GXX) $(GXXFLAGS) driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o -o $(EXE_FILE)
 
 driver.o: driver.cpp
 	$(GXX) $(GXXFLAGS) -c driver.cpp
@@ -34,15 +34,18 @@ Sea_lion.o: Sea_lion.cpp Sea_lion.h
 Tiger.o: Tiger.cpp Tiger.h
 	$(GXX) $(GXXFLAGS) -c Tiger.cpp
 
-
 Date.o: Date.cpp Date.h
 	$(GXX) $(GXXFLAGS) -c Date.cpp
 
 Probability.o: Probability.cpp Probability.h
 	$(GXX) $(GXXFLAGS) -c Probability.cpp
 
+Player.o: Player.cpp Player.h
+	$(GXX) $(GXXFLAGS) -c Player.cpp
+
 Zoo.o: Zoo.cpp Zoo.h
 	$(GXX) $(GXXFLAGS) -c Zoo.cpp	
+
 clean: 
 	rm -f *.out *.o $(EXE_FILE)
 	 

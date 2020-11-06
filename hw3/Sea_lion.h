@@ -22,8 +22,7 @@ protected:
 
 public:
 	// The Sea_lion constructor.
-	Sea_lion(const char* where, Date when): Animal(where, when)
-	{}
+	Sea_lion(const char* where, Date when);
 
 };
 

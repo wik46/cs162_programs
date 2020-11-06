@@ -46,40 +46,37 @@
 
 #include "Date.h"
 #include "Probability.h"
+#include "Player.h"
 
 #include <iomanip>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 int main(){
+	// Seeding the random number generator.
+	srand(time(NULL));	
+
 	Date current(5,1,2000);
 	std::cin.get();
 	
 	Animal a("zoo", current);
 	Zoo z;
-	++z;
+
+//	++z;
+	Player player;
+
+	// This will prompt the user if they want to buy at least one animal.
+	if(player.is_buy()){
+		z.Auction();
+	}
+	// This will calculate the expenses occured from the foodcost of the animal.	
+	// bank() will decrease the bank total and determine if the player has sufficient funds
+	// to constinue.
+	/*player.bank() = */z.Expenses(rand() % 41 + 81);	
 	
-	Animal* dynamic = new Animal("zoo",current);
-	Animal* dynamic1 = new Animal("zoo",current);
-	z[0] = dynamic;
-	z[1] = dynamic1;
+
 	std::cout << z << std::endl;
-
-	// All these classes inherit from Animal.
-	Animal* bear  = new Bear("zoo", current);
-	Animal* sea_lion = new Sea_lion("zoo", current);
-	Animal* tiger = new Tiger("zoo", current);
-	++z;	
-	++z;	
-	++z;	
-	z[2] = bear;
-	z[3] = sea_lion;
-	z[4] = tiger;
-
-	for(int i = 0; i < z.get_num_animals(); i++){
-		std::cout << *(z[i]) << std::endl;
-	}	
-	
-	
 	Probability p;
 	p.increase();
 	p.increase();

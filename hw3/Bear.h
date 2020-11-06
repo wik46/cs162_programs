@@ -23,8 +23,7 @@ protected:
 
 public:
 	// The Bear constructor.
-	Bear(const char* where, Date when): Animal(where, when)
-	{}
+	Bear(const char* where, Date when);
 
 };
 
