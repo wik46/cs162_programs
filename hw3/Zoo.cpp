@@ -27,6 +27,8 @@
 #include <iomanip>
 #include <iostream>
 
+void swap(Animal*, Animal*);
+
 /* ***************************************************************************************
  * Function name: get_num_animals().
  * Description: This function will be used to return the number of animals to the zoo.
@@ -37,6 +39,54 @@
  * **************************************************************************************/
 int Zoo::get_num_animals() const{
 	return m_num_animals;
+}
+
+/* ***************************************************************************************
+ * Function name: Hospital()
+ * Description: This function will be used when an animal gets sick.
+ * 		It will accept the total of the player's bank account,
+ * 		determine randomly which animal get's sick and then
+ * 		bill the player automatically if he can afford it.
+ * 		Else it will return 0 and the animal dies.
+ * ParametersL int.
+ * Pre-conditions: The function will make sure that there is at least one animal
+ * 			in the Zoo.
+ * Post-condtions: Returns the medical cost associated with the animal's illness.
+ * 			Else return 0 if the user can't afford it.
+ * **************************************************************************************/
+int Zoo::Hospital(int bank_total){
+	// First determine if there is at least one animal in the Zoo.
+	if(this->m_all_animals[0] != NULL){
+		// Case if the user can afford the medical cost.
+		int i = rand() % m_num_animals;
+		int medical_cost = (*this)[i]->get_cost();	
+		if((*this)[i]->is_baby()){
+			// If the age is 6 months or less than it is a baby.
+			// A baby cost twice ass much when they get sick.
+			medical_cost *= 2;	
+		}
+		// Output to the user.
+		std::cout << "[Caution]: A " << (*this)[i]->get_type() << " of age " 
+		<< (*this)[i]->get_age_months() << " is unhealthy.\nMedical attention needed!!!" 
+		<< std::endl << "[Medical cost]: $ " << medical_cost << std::endl; 
+		// Determine if the user can afford it.
+		if(bank_total >= medical_cost){
+			// The player.bank() function will subtract the expenses.
+			std::cout << "[Medical bill sent, the vetenary says that the " 
+			<< (*this)[i]->get_type() << " will recover quickly]." << std::endl;
+			// The function will return the cost associated.
+			return medical_cost;
+		}else{
+			std::cout << "[The vetenary reported that your  " << (*this)[i]->get_type() 
+			<< " - "<< (*this)[i]->get_name() << "- , age "<< (*this)[i]->get_age_months() 
+			<< " has died]." << std::endl;
+			// Animal removed from the Zoo.
+			swap((*this)[i], (*this)[m_num_animals - 1]);
+			--(*this);
+		}
+	}
+	int no_cost = 0;
+	return no_cost;
 }
 /* ***************************************************************************************
  * Function name: Auction().
@@ -126,7 +176,32 @@ float Zoo::Expenses(float perc){
 	// Return by value.
 	return total;
 }
-
+/* ***************************************************************************************
+ * Function name: attendence_boom().
+ * Description: This function will be called when there is a boom in attendence
+ * 		and the Sea lions generate extra profit. It will tell the user
+ * 		that there was a boom in attendance but because he/she had no Sea lion,
+ * 		the user did not receive additinal funds.
+ * Pre-conditions: Will be used inside the Random_events() function.
+ * Post-condtions: Returns the number of additional income generated from a
+ * 			boom in attendence.
+ * **************************************************************************************/
+int Zoo::attendance_boom(){
+	for(int i = 0; i < m_num_animals; i++){
+		// Makes sure that I dont access a NULL pointer.
+		if((*this)[i] != NULL){
+			// If the animal in the array is a Sea lion.
+			if(( (*this)[i]->m_type) == "Sea lion"){
+				return (*this)[i]->calc_boom_total();
+			}
+		}	
+	}
+	// This is if there are no Sea lions in the Zoo.
+	std::cout << std::endl
+	<< "You had a boom in the attendance at the Zoo but becuase you do " <<
+	"not have any sea lions, you did not receive additional funds." << std::endl;
+	return 0;
+}
 /* ***************************************************************************************
  * Function name: operator[]().
  * Description: This function will return a reference to an Animal* becuase
@@ -160,6 +235,10 @@ Animal*& Zoo::operator[](int i){
  * Ouput: The Animal** array is increase by a size of 1.
  * **************************************************************************************/
 Zoo& Zoo::operator++(){
+	// If is is the empty Zoo then there is on need to increment it.
+	if(this->m_all_animals[0] == NULL){
+		return (*this);
+	}
 	// We create the new array of size + 1.
 	Animal** tmp_ar = new Animal*[m_num_animals + 1];
 	// Now we save all the data into the new array.
@@ -175,9 +254,37 @@ Zoo& Zoo::operator++(){
 	// Let us set the new element equal to NULL so that the destructor won't
 	// free it.
 	this->m_all_animals[m_num_animals - 1] = NULL;
-	// We return the object with an increas of cages/elements of one.
+	// We return the object with an increase of cages/elements of one.
 	return (*this);
 	
+}
+/* ***************************************************************************************
+ * Function name: operator--().
+ * Description: This function will be used to remove the last element
+ * 		in the array of Animal*. It will free the memory and
+ * 		decrement the size of the array by one.
+ * Parameters: -.
+ * Pre-conditions: This function makes sure that there is an element in the array before 
+ * 			freeing the memory.
+ * Post-conditions: - 
+ * **************************************************************************************/
+Zoo& Zoo::operator--(){
+	// The array will always have one element.
+	if(this->m_all_animals[0] != NULL){
+		Animal** tmp = new Animal*[this->m_num_animals - 1];
+		for(int i = 0; i < m_num_animals - 1; i++){
+			tmp[i] = this->m_all_animals[i];
+		}
+		// Now the last element.
+		delete m_all_animals[m_num_animals - 1];
+		delete[] this->m_all_animals;
+		// Now I set the smaller array equal to
+		this->m_all_animals = tmp;
+		// Decreasing the size of the array by one.
+		this->m_num_animals--;
+	}else{
+		return (*this);
+	}
 }
 
 /* ***************************************************************************************
@@ -260,7 +367,7 @@ Zoo::~Zoo(){
 	delete[] m_all_animals;
 }
 
-/*
+/* ***************************************************************************************
  * Function name: operator=().
  * Description: Because my class makes used of dynamic memory, I need to define
  * 		my own overloaded assignment operator. This will do a deep copy from
@@ -269,7 +376,7 @@ Zoo::~Zoo(){
  * Pre-conditions: Assumes that the instance of a Zoo from where the data will be copied
  * 		   is already initialized.
  * Post-conditions: Implements a deep copy.
- * */
+ * **************************************************************************************/
 Zoo& Zoo::operator=(const Zoo& old_z){
 	if(this == &old_z){
 		// Checking for self assignment.
@@ -285,3 +392,19 @@ Zoo& Zoo::operator=(const Zoo& old_z){
 	}
 	return *this;
 }
+
+/* ***************************************************************************************
+ * Function name: swap()
+ * Description: This is not a member function but it is used inside the Hospital()
+ * 		function to swap around two Animal*'s.
+ * Parameters: Animal*, Animal*.
+ * Pre-conditions: -
+ * Post-conditions: Swaps the position of two Animals*'s in the array.
+ * **************************************************************************************/
+void swap(Animal* a1, Animal* a2){
+	Animal* tmp = a1;
+	a1 = a2;
+	a2 = tmp;
+	return;
+}
+

@@ -29,7 +29,6 @@
 //
 class Zoo{
 	// This will the array that stores all my animals.
-public:
 	// This is an array of various animals: Bears, Tigers ...
 	// We use an array of Animal*.
 	Animal** m_all_animals;
@@ -42,18 +41,30 @@ public:
 	// This function will be used to get the number of animals
 	// in the Zoo.
 	int get_num_animals() const;
+	// This function will get called when an animal is sick and will return the
+	// cost if the user can afford it, else the animal dies and returns 0.
+	int Hospital(int);
 	// This function will prompt the user to buy animals.
 	void Auction();
 	// This function will calculate the expenses occured from the foor cost.
 	float Expenses(float);
-	
+	// This function will be used in my random event function.
+	// It will be called if a boom in the attendce occurs.
+	// If there are no Sea lions in the Zoo is will tell the user.
+	int attendance_boom();	
 	// This subscript operator overload will return the animal at the index
 	// passed in as argument.
 	// Note that this returns an animal reference.
 	// +++ private +++.
+
+private:
 	Animal*& operator[](int);
 	// This will increase the number of cages in the Zoo by 1.
 	Zoo& operator++();
+	// This function will be used to to remove th last element in the array of 
+	// Animal*.
+	Zoo& operator--();
+public:
 	// This function will be used to print all the animals in the Zoo.
 	friend std::ostream& operator<<(std::ostream&, const Zoo&);
 	// This constructor will create a Zoo given size.

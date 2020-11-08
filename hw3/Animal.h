@@ -100,12 +100,15 @@ public:
 	// This function will return the revenue earned by the instance of Animal that
 	// it is called with.
 	float earn_revenue(unsigned int bonus = 0) const;
-	
+
+	// This function is used by the Sea_lion class.
+	virtual int calc_boom_total(){};
 	// Overloaded operators.
 	friend std::ostream& operator<<(std::ostream&, const Animal&);
 
 	// This constructor is used when an animal is born in the zoo or bought.	
 	Animal(const char*, Date when = Date(0,0,0) );
-	
+	// The destructor.
+	virtual ~Animal() = default;	
 };
 #endif 
