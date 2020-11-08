@@ -42,6 +42,9 @@ public:
 	// event starts with a 25% of occuring.
 	Probability(int e0 = 0, int e1 = 1, int e2 = 2, int e3 = 3);
 
+	// Destructor.
+	// Copy constructor.
+	// Assignment operator overload.
 };
 
 #endif

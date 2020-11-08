@@ -39,21 +39,75 @@
  * **************************************************************************************/
 
 #include "Animal.h"
+#include "Bear.h"
+#include "Sea_lion.h"
+#include "Tiger.h"
+#include "Zoo.h"
+
 #include "Date.h"
+#include "Probability.h"
+#include "Player.h"
 
 #include <iomanip>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 int main(){
-	Date current(5,1,2000);
+	// Seeding the random number generator.
+	srand(time(NULL));	
 	
-	Animal a("zoo", current);
-	std::cout << a.m_place_of_birth << std::endl;
-	std::cin >> a.m_cost;
-	std::cin >> a.m_perc_rev;
-	a.m_birth_date.print_fnumeric();
-	std::cout << a << std::endl;
-		
-	std::cout << Animal::m_total_animals << std::endl;
+	std::string game_state = "";
+	do{
+		Date current(5,1,2000);
+		std::cout << std::endl;
+		std::cout << "*************************************************************" << std::endl;
+		std::cout << "Press enter to start the game." << std::endl;
+		std::cout << "*************************************************************" << std::endl;
+		std::cin.get();
 
+		// This will be all inside the game class	
+		Zoo z;
+		Player player;
+
+		// This will calculate the expenses occured from the foodcost of the animal.	
+		// bank() will decrease the bank total and determine if the player has sufficient funds
+		// to constinue.
+		player.get_bank() += z.Expenses(rand() % 41 + 81);	
+	
+	
+		//std::cout << z << std::endl;
+		Probability p;
+		std::cout << "*******************************************************************" 
+		<< std::endl;
+		if(p.get_event() == 0){	
+			// This is when an animal turns ill.
+			player.get_bank() -= z.Hospital(player.get_bank());
+		}else if(p.get_event() == 1){
+			// This is when there is an increase in attendence and the Sea lions 
+			// produce more income.
+			std::cout << "There was a great increase in attendance at the Zoo." 
+			<< std::endl;
+			player.get_bank() += z.attendance_boom();
+		}else if(p.get_event() == 2){
+			// This is when a new babies is born in the Zoo.
+			
+		}else if(p.get_event() == 3){	
+			// No special event occured.
+			std::cout << "\nNothing interesting happend this round.\n" << std::endl;
+		}
+		std::cout << "[current total:] $ " << player.get_bank() << std::endl;
+		std::cout << "*******************************************************************" 
+		<< std::endl;
+	
+		// This will prompt the user to buy new animals.
+		if(player.is_buy()){
+		z.Auction();
+		}
+
+	std::cout << "Play again? :";
+	std::cin >> game_state;
+	
+	}while(game_state != "terminated");
+	return 0;
 }
