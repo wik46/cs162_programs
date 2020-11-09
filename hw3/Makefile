@@ -16,11 +16,14 @@ GXXFLAGS = -std=c++11 -g
 
 # Targets.
 
-$(EXE_FILE): driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o 
-	$(GXX) $(GXXFLAGS) driver.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o -o $(EXE_FILE)
+$(EXE_FILE): driver.o Game.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o 
+	$(GXX) $(GXXFLAGS) driver.o Game.o Animal.o Bear.o Sea_lion.o Tiger.o Date.o Probability.o Player.o Zoo.o -o $(EXE_FILE)
 
 driver.o: driver.cpp
 	$(GXX) $(GXXFLAGS) -c driver.cpp
+
+Game.o: Game.cpp Game.h
+	$(GXX) $(GXXFLAGS) -c Game.cpp
 
 Animal.o: Animal.cpp Animal.h
 	$(GXX) $(GXXFLAGS) -c Animal.cpp

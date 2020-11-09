@@ -45,6 +45,18 @@ int Zoo::get_num_animals() const{
 	return m_num_animals;
 }
 /* ***************************************************************************************
+ * Function name: get_food_type().
+ * Description: This function will be used to return the food type used by the zoo.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the foood type of the Zoo.
+ * **************************************************************************************/
+// This will return the food type.
+const std::string& Zoo::get_food_type(){
+	return m_which_food; 
+}
+
+/* ***************************************************************************************
  * Function name: Auction().
  * Description: This function is used to simulate the auction of the Zoo.
  * 		When a user enters an integer, it corresponds to the animal that they 
@@ -56,7 +68,8 @@ int Zoo::get_num_animals() const{
  * Post-condtions: The user bought at most 2 animals of the same species.
  * **************************************************************************************/
 ///#####################
-void Zoo::Auction(){
+int Zoo::Auction(){
+	int total_cost = 0;
 	// This prompt the user to enter the type of animal that they want to buy.
 	std::string msg1 = "Type of animal: Bear - 0, Sea_lion - 1, or Tiger - 2.";
 	int which_animal = get_int(msg1);
@@ -80,10 +93,12 @@ void Zoo::Auction(){
 			// The user selected to buy a Tiger.
 			}else if (which_animal == 2){
 				this->m_all_animals[m_num_animals - 1] = new Tiger("other", Date()); /// Remove default dates.
-			}else{
-				std::cout << "[Auction]: Error in logic." << std::endl;
-			}	
+			}
+			// This adds the cost of the animal to total cost.
+			total_cost += this->m_all_animals[m_num_animals - 1]->get_cost();
 		}
+		std::cout << "\n*** Total cost of purchase: $ " << total_cost <<  std::endl << std::endl;
+
 	}else{
 		std::cout << std::endl;	
 		std::cout << "I am sorry " << " [Auction player custom name]" <<
@@ -91,8 +106,38 @@ void Zoo::Auction(){
 		<< " and " << which_animal << "." << std::endl;
 		Auction();
 	}
-	return;
+	return total_cost;
 }
+/* ***************************************************************************************
+ * Function name: Income().
+ * Description: This function will return the income generated from owning
+ * 		the number of animals in the zoo.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the floating point value that is deposited into
+ * 		    the player's bank account
+ * **************************************************************************************/
+float Zoo::Income(){
+	float income = 0.0;
+	// The case for an empty Zoo.
+	if(this->m_all_animals[0] == NULL){
+		return income;
+	}else{
+		for(int i = 0; i < this->m_num_animals; i++){
+			// earn_revenue() returns the correct value earned of each animal.
+			// The parameter is 0 becuase the bonus is handled elsewhere.
+			income += this->m_all_animals[i]->earn_revenue(0);		
+		}
+		std::cout << std::setprecision(2);
+		std::cout << std::endl << std::endl
+		<< "Income earned this month excluding any bonusses: $" << income
+		<< std::endl;
+	}
+	// This returns the total income earned by the player per round.
+	return income;
+}
+
+
 /* ***************************************************************************************
  * Function name: Expenses().
  * Description: This function will calculate the expenses based on the base cost for the
@@ -114,7 +159,7 @@ float Zoo::Expenses(float perc){
 	// This will determine which quality food the user buys for his/her animals.
 	// The food type starts at regular each round and it will only be changed of the
 	// user chooses another food type.
-	int fd_type = 1;
+	float fd_type = 1;
 	if(m_which_food == "premium"){
 		fd_type = 2;
 	}else if(m_which_food == "cheap"){
@@ -130,6 +175,8 @@ float Zoo::Expenses(float perc){
 		}
 	}
 	// Return by value.
+	std::cout << "\n*** This months food cost: $" << total << std::endl << std::endl;
+
 	return total;
 }
 /* ***************************************************************************************
@@ -147,16 +194,17 @@ float Zoo::Expenses(float perc){
  * 			Else return 0 if the user can't afford it.
  * **************************************************************************************/
 int Zoo::Hospital(int bank_total){
+	std::cout << std::setprecision(2);
 	// First determine if there is at least one animal in the Zoo.
 	if(this->m_all_animals[0] != NULL){
 		// Case if the user can afford the medical cost.
 		int i = rand() % m_num_animals;
-		int medical_cost = (*this)[i]->get_cost();	
-		if((*this)[i]->is_baby()){
+		int medical_cost = (*this)[i]->get_sick();	
+		//if((*this)[i]->is_baby()){
 			// If the age is 6 months or less than it is a baby.
 			// A baby cost twice ass much when they get sick.
-			medical_cost *= 2;	
-		}
+		//	medical_cost *= 2;	
+		//}
 		// Output to the user.
 		std::cout << "[Caution]: A " << (*this)[i]->get_type() << " of age " 
 		<< (*this)[i]->get_age_months() << " is unhealthy.\nMedical attention needed!!!" 
@@ -197,6 +245,8 @@ void Zoo::babies_born(){
 	// If there is no adults on the zoo, search_adult() will return -1.
 	int i = search_adult((*this));
 	if(i > -1){
+		std::cout << "*** A total of " <<(*this)[i]->give_birth() 
+		<< " new babies are born." << std::endl;
 		// give_birth() returns the number of babies that the animal delivers.
 		for(int j = 0; j < (*this)[i]->give_birth(); j++){
 			// This creates space in the Zoo for the new born.
@@ -270,6 +320,7 @@ int Zoo::attendance_boom(){
  * 		    round.
  * **************************************************************************************/
 void Zoo::Random_events(Player& player, const Probability& p){
+	std::cout << std::setprecision(2);
 	std::cout << "************************************************************"<<
 	"***********" << std::endl;
 	// Returns an integer between 0 - 3, inclusively.
@@ -317,6 +368,43 @@ void Zoo::x_month_older(int num_month){
 	}
 }
 
+
+/* ***************************************************************************************
+ * Function name: which_food().
+ * Description: This function will set the food type that the user selects for its animals.
+ * 		- "Cheap": Half of base price.
+ * 		- "Regular": Base price.
+ * 		- "Preimium": Double of base price.
+ * Parameters: -
+ * Pre-conditions: This funcion only changes the m_which_food variable.
+ * Post-conditions: The type of food used in the Zoo is set.
+ * **************************************************************************************/
+void Zoo::which_food(){
+	std::cout << std::endl
+	<< "Please select the type of food that you want to feed your "<< this->m_num_animals
+	<< " animals.\n\n" 
+	<< "a.) Cheap - 1: Price is half of the base price but it will increase the" <<
+	" probability of getting sick animals.\n" 
+	<< "b.) Regular - 2: Price is the base price" <<
+	" probability of getting sick animals is not affected.\n" 
+	<< "c.) Premium - 3: Price is double of the base price but it will decrease the" <<
+	" probability of getting sick animals." << std::endl;
+	std::string tmp = "";
+	std::cin >> tmp;
+	if(tmp == "1"){
+		m_which_food = "cheap"; 
+	}else if(tmp == "2"){
+		m_which_food = "regular"; 
+	}else if(tmp == "3"){
+		m_which_food = "premium"; 
+	}else{
+		std::cout << std::endl << std::endl
+		<< "Please enter an integer between 1 - 3 to select you food choice.\n"
+		<< std::endl << std::endl;
+		this->which_food();
+	}
+	return;
+}
 /* ***************************************************************************************
  * Function name: operator[]().
  * Description: This function will return a reference to an Animal* becuase
@@ -439,14 +527,13 @@ Zoo& Zoo::operator--(){
 std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){ 
 	stream_out << std::setprecision(3) << std::left;
 	stream_out << std::endl;
-	stream_out << "-------------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------" 
 	<< std::endl;
 	stream_out << std::setw(12) << "| Id-number" 
 	<< std::setw(12) << "Name " << 
 	std::setw(12) << "Type"<< std::setw(7) << "Age" <<
-	std::setw(17) << "Date of Purchase" <<
 	std::setw(15)<< "Birth Place |" << std::endl;
-	stream_out << "-------------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------" 
 	<< std::endl;
 	for(int i = 0; i < zoo.m_num_animals; i++){
 		if(zoo.m_all_animals[i] != NULL){
@@ -454,7 +541,7 @@ std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){
 		}
 	}
 
-	stream_out << "-------------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------" 
 	<< std::endl;
 	return stream_out;
 }

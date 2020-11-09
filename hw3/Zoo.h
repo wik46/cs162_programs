@@ -45,8 +45,12 @@ public:
 	// This function will be used to get the number of animals
 	// in the Zoo.
 	int get_num_animals() const;
+	// This will return the food type.
+	const std::string& get_food_type();
 	// This function will prompt the user to buy animals.
-	void Auction();
+	int Auction();
+	// This function will return the income earned from the animals in the zoo.
+	float Income();
 	// This function will calculate the expenses occured from the foor cost.
 	float Expenses(float);
 	// 1st RANDOM EVENT. ====
@@ -60,6 +64,8 @@ public:
 	// It will be called if a boom in the attendce occurs.
 	// If there are no Sea lions in the Zoo is will tell the user.
 	int attendance_boom();	
+	// This function prompts the user to select the quality food.
+	void which_food();
 	// This subscript operator overload will return the animal at the index
 	// passed in as argument.
 	// This is the version that the is allowed for use outside the class.

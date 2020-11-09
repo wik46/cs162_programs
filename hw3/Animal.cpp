@@ -254,9 +254,14 @@ int Animal::give_birth() const{
  * 	   revenue earned from owning the animal.
  * **************************************************************************************/
 float Animal::earn_revenue(unsigned int bonus) const{
-	// The bonus will default to zero if no
-	// argument was passed to the function.
-	return m_cost * m_perc_rev + bonus;
+	if(this->is_baby()){
+		// A baby earns double the revenue than that of an adult.
+		return m_cost * m_perc_rev * 2 + bonus;
+	}else{
+		// The bonus will default to zero if no
+		// argument was passed to the function.
+		return m_cost * m_perc_rev + bonus;
+	}
 }
 
 // ## Friend function, not a member function.##
@@ -280,7 +285,6 @@ std::ostream& operator<<(std::ostream& stream_out, const Animal& a){
 	stream_out << std::setw(12) << a.m_id_number  
 	<< std::setw(12) << a.m_name << 
 	std::setw(12) << a.m_type << std::setw(7) << a.m_age_months <<
-	std::setw(17) << a.m_birth_date <<
 	std::setw(17)<< a.m_place_of_birth;
 	return stream_out;
 }
