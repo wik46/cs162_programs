@@ -57,6 +57,12 @@ int main(){
 	// Seeding the random number generator.
 	srand(time(NULL));	
 	
+
+	const Probability p;
+	// This will be all inside the game class	
+	Zoo z;
+	Player player;
+	
 	std::string game_state = "";
 	do{
 		Date current(5,1,2000);
@@ -64,46 +70,25 @@ int main(){
 		std::cout << "*************************************************************" << std::endl;
 		std::cout << "Press enter to start the game." << std::endl;
 		std::cout << "*************************************************************" << std::endl;
-		std::cin.get();
+		std::cin.ignore(256, '\n');
+		//std::cin.get();
+		//std::cin.ignore(256, '\n');
 
-		// This will be all inside the game class	
-		Zoo z;
-		Player player;
+		z.Random_events(player, p);		
+
+		// This will prompt the user to buy new animals.
+		if(player.is_buy()){
+			z.Auction();
+		}
 
 		// This will calculate the expenses occured from the foodcost of the animal.	
 		// bank() will decrease the bank total and determine if the player has sufficient funds
-		// to constinue.
-		player.get_bank() += z.Expenses(rand() % 41 + 81);	
-	
-	
-		//std::cout << z << std::endl;
-		Probability p;
-		std::cout << "*******************************************************************" 
-		<< std::endl;
-		if(p.get_event() == 0){	
-			// This is when an animal turns ill.
-			player.get_bank() -= z.Hospital(player.get_bank());
-		}else if(p.get_event() == 1){
-			// This is when there is an increase in attendence and the Sea lions 
-			// produce more income.
-			std::cout << "There was a great increase in attendance at the Zoo." 
-			<< std::endl;
-			player.get_bank() += z.attendance_boom();
-		}else if(p.get_event() == 2){
-			// This is when a new babies is born in the Zoo.
-			
-		}else if(p.get_event() == 3){	
-			// No special event occured.
-			std::cout << "\nNothing interesting happend this round.\n" << std::endl;
-		}
-		std::cout << "[current total:] $ " << player.get_bank() << std::endl;
-		std::cout << "*******************************************************************" 
-		<< std::endl;
-	
-		// This will prompt the user to buy new animals.
-		if(player.is_buy()){
-		z.Auction();
-		}
+		// to continue.
+		player.get_bank() -= z.Expenses(rand() % 41 + 81);	
+		z.x_month_older();
+		
+
+		std::cout << z << std::endl;
 
 	std::cout << "Play again? :";
 	std::cin >> game_state;

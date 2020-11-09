@@ -32,7 +32,7 @@ class Probability{
 public:	
 	// This function will return the event that occured.
 	// It uses a random number generator.
-	const int get_event();
+	const int get_event() const;
 	// This function will double the probability of an event occuring.
 	// Pass in the event that you want to increase.
 	void increase();

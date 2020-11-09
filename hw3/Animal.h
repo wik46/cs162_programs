@@ -70,6 +70,7 @@ public:
 	std::string get_type() const;
 	
 	int get_age_months() const;
+	int& get_age_months();
 	
 	const std::string get_place_of_birth() const;
 	

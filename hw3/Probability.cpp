@@ -26,7 +26,7 @@
  * Input: -
  * Output: 0,1,2, or 3 based on the event selected.
  * **************************************************************************************/
-const int Probability::get_event(){
+const int Probability::get_event() const{
 	int decider = rand() % m_total_events;
 	if(decider == m_event1){
 		// This is a babies getting born.

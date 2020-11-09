@@ -67,13 +67,25 @@ std::string Animal::get_type() const {
 	return m_type;
 }
 /* ***************************************************************************************
- * Function name: get_age_months().
+ * Function name: get_age_months() const.
  * Description: This function is used to get access of the m_age_months member variable.
  * Parameters: -
  * Pre-conditions: -
  * Post-conditions: Returns the member variable m_age_months.
  * **************************************************************************************/
 int Animal::get_age_months() const {
+	// This will represent the age of the animal (in months.)
+	return m_age_months;
+}
+/* ***************************************************************************************
+ * Function name: get_age_months().
+ * Description: This function is used to get access of the m_age_months member variable.
+ * Non-const version.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Returns the member variable m_age_months.
+ * **************************************************************************************/
+int& Animal::get_age_months(){
 	// This will represent the age of the animal (in months.)
 	return m_age_months;
 }
