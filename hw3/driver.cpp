@@ -38,6 +38,8 @@
  * 	   line interface
  * **************************************************************************************/
 
+
+
 #include "Animal.h"
 #include "Bear.h"
 #include "Sea_lion.h"
@@ -45,69 +47,75 @@
 #include "Zoo.h"
 
 #include "Date.h"
+#include "Game.h"
 #include "Probability.h"
 #include "Player.h"
+
 
 #include <iomanip>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
+/*
+void press_enter(){		
+		std::cout << std::endl;
+		std::cout << "*******************************************************"
+		<< "****************" << std::endl;
+		std::cout << "Press enter to start the game." << std::endl;
+		std::cout << "*******************************************************"
+		<< "****************" << std::endl;
+		std::cin.ignore(256, '\n');
+		//std::cin.get();
+}
+*/
 int main(){
 	// Seeding the random number generator.
-	srand(time(NULL));	
+	//srand(time(NULL));	
 	
-	std::string game_state = "";
+
+	Game g;
+	
 	do{
-		Date current(5,1,2000);
-		std::cout << std::endl;
-		std::cout << "*************************************************************" << std::endl;
-		std::cout << "Press enter to start the game." << std::endl;
-		std::cout << "*************************************************************" << std::endl;
-		std::cin.get();
+		// This function will only be called once at the start of the game.
+		// It will set all the m_game_state variable to "in_progress".
+		g.Start_game();
+		
+		// Function tasks.
+		// 1. Simulate random events:
+		// 	a. An animals gets sick,
+		// 	b. A new baby is born,
+		// 	c. Increase in the attendence at the zoo, or
+		// 	d. Nothing happens.
+		g.get_zoo().Random_events(g.get_player(), g.get_prob());		
+		
+		// Function tasks.
+		// 1. Calculate the total income earned excluding the bonus 
+		//    from the Sea lions.
+		g.get_player().get_bank() += g.get_zoo().Income();
 
-		// This will be all inside the game class	
-		Zoo z;
-		Player player;
-
-		// This will calculate the expenses occured from the foodcost of the animal.	
-		// bank() will decrease the bank total and determine if the player has sufficient funds
-		// to constinue.
-		player.get_bank() += z.Expenses(rand() % 41 + 81);	
-	
-	
-		//std::cout << z << std::endl;
-		Probability p;
-		std::cout << "*******************************************************************" 
-		<< std::endl;
-		if(p.get_event() == 0){	
-			// This is when an animal turns ill.
-			player.get_bank() -= z.Hospital(player.get_bank());
-		}else if(p.get_event() == 1){
-			// This is when there is an increase in attendence and the Sea lions 
-			// produce more income.
-			std::cout << "There was a great increase in attendance at the Zoo." 
-			<< std::endl;
-			player.get_bank() += z.attendance_boom();
-		}else if(p.get_event() == 2){
-			// This is when a new babies is born in the Zoo.
-			
-		}else if(p.get_event() == 3){	
-			// No special event occured.
-			std::cout << "\nNothing interesting happend this round.\n" << std::endl;
-		}
-		std::cout << "[current total:] $ " << player.get_bank() << std::endl;
-		std::cout << "*******************************************************************" 
-		<< std::endl;
-	
 		// This will prompt the user to buy new animals.
-		if(player.is_buy()){
-		z.Auction();
+		if(g.get_player().is_buy()){
+			g.get_player().get_bank() -= g.get_zoo().Auction();
 		}
+		// Function tasks.
+		// 1. Prompt the user to select the quality of food that they
+		//    want to feed there animals.
 
-	std::cout << "Play again? :";
-	std::cin >> game_state;
+		g.get_zoo().which_food();
+		// Function tasks.
+		// 1. Calculate all the expenses occured by the player.
+		// 2. Subtract the expenses from the player's account.
+		g.get_player().get_bank() -= g.get_zoo().Expenses(rand() % 41 + 81);	
 	
-	}while(game_state != "terminated");
+		// Function tasks.
+		// 1. Increase the age of the animals.
+		// 2. Increase/decrease the animals probability of gettin sick.
+		// 3. Prompt the user to continue/quit the game.
+		// 4. Make sure that the user has sufficient funds to continue the game.	
+		g.Play_next_round();
+
+	}while(g.get_game_state() != "terminated");
+	std::cout << "\nGoodbey." << std::endl;
 	return 0;
 }

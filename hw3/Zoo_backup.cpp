@@ -18,20 +18,16 @@
 //  	in the zoo.
 // ---------------------------------------------------------------------------------------
 #include "Animal.h"
-#include "Bear.h"
-#include "Sea_lion.h"
-#include "Tiger.h"
 #include "Date.h"
 #include "Player.h"
 #include "Zoo.h"
-#include "Probability.h"
+#include <assert.h>
 
 #include <cassert>
 #include <iomanip>
 #include <iostream>
 
 void swap(Animal*, Animal*);
-int search_adult(const Zoo&);
 
 /* ***************************************************************************************
  * Function name: get_num_animals().
@@ -44,18 +40,54 @@ int search_adult(const Zoo&);
 int Zoo::get_num_animals() const{
 	return m_num_animals;
 }
-/* ***************************************************************************************
- * Function name: get_food_type().
- * Description: This function will be used to return the food type used by the zoo.
- * Parameters: -
- * Pre-conditions: -
- * Post-conditions: Returns the foood type of the Zoo.
- * **************************************************************************************/
-// This will return the food type.
-const std::string& Zoo::get_food_type(){
-	return m_which_food; 
-}
 
+/* ***************************************************************************************
+ * Function name: Hospital()
+ * Description: This function will be used when an animal gets sick.
+ * 		It will accept the total of the player's bank account,
+ * 		determine randomly which animal get's sick and then
+ * 		bill the player automatically if he can afford it.
+ * 		Else it will return 0 and the animal dies.
+ * ParametersL int.
+ * Pre-conditions: The function will make sure that there is at least one animal
+ * 			in the Zoo.
+ * Post-condtions: Returns the medical cost associated with the animal's illness.
+ * 			Else return 0 if the user can't afford it.
+ * **************************************************************************************/
+int Zoo::Hospital(int bank_total){
+	// First determine if there is at least one animal in the Zoo.
+	if(this->m_all_animals[0] != NULL){
+		// Case if the user can afford the medical cost.
+		int i = rand() % m_num_animals;
+		int medical_cost = (*this)[i]->get_cost();	
+		if((*this)[i]->is_baby()){
+			// If the age is 6 months or less than it is a baby.
+			// A baby cost twice ass much when they get sick.
+			medical_cost *= 2;	
+		}
+		// Output to the user.
+		std::cout << "[Caution]: A " << (*this)[i]->get_type() << " of age " 
+		<< (*this)[i]->get_age_months() << " is unhealthy.\nMedical attention needed!!!" 
+		<< std::endl << "[Medical cost]: $ " << medical_cost << std::endl; 
+		// Determine if the user can afford it.
+		if(bank_total >= medical_cost){
+			// The player.bank() function will subtract the expenses.
+			std::cout << "[Medical bill sent, the vetenary says that the " 
+			<< (*this)[i]->get_type() << " will recover quickly]." << std::endl;
+			// The function will return the cost associated.
+			return medical_cost;
+		}else{
+			std::cout << "[The vetenary reported that your  " << (*this)[i]->get_type() 
+			<< " - "<< (*this)[i]->get_name() << "- , age "<< (*this)[i]->get_age_months() 
+			<< " has died]." << std::endl;
+			// Animal removed from the Zoo.
+			swap((*this)[i], (*this)[m_num_animals - 1]);
+			--(*this);
+		}
+	}
+	int no_cost = 0;
+	return no_cost;
+}
 /* ***************************************************************************************
  * Function name: Auction().
  * Description: This function is used to simulate the auction of the Zoo.
@@ -68,8 +100,7 @@ const std::string& Zoo::get_food_type(){
  * Post-condtions: The user bought at most 2 animals of the same species.
  * **************************************************************************************/
 ///#####################
-int Zoo::Auction(){
-	int total_cost = 0;
+void Zoo::Auction(){
 	// This prompt the user to enter the type of animal that they want to buy.
 	std::string msg1 = "Type of animal: Bear - 0, Sea_lion - 1, or Tiger - 2.";
 	int which_animal = get_int(msg1);
@@ -86,19 +117,17 @@ int Zoo::Auction(){
 			++(*this);
 			// The user selected to buy a Bear.
 			if(which_animal == 0){
-				this->m_all_animals[m_num_animals - 1] = new Bear("other", Date());
+				(*this)[m_num_animals - 1] = new Bear("other", Date());
 			// The user selected to buy a Sea_lion.
 			}else if(which_animal == 1){
-				this->m_all_animals[m_num_animals - 1] = new Sea_lion("other", Date());
+				(*this)[m_num_animals - 1] = new Sea_lion("other", Date());
 			// The user selected to buy a Tiger.
 			}else if (which_animal == 2){
-				this->m_all_animals[m_num_animals - 1] = new Tiger("other", Date()); /// Remove default dates.
-			}
-			// This adds the cost of the animal to total cost.
-			total_cost += this->m_all_animals[m_num_animals - 1]->get_cost();
+				(*this)[m_num_animals - 1] = new Tiger("other", Date()); /// Remove default dates.
+			}else{
+				std::cout << "[Auction]: Error in logic." << std::endl;
+			}	
 		}
-		std::cout << "\n*** Total cost of purchase: $ " << total_cost <<  std::endl << std::endl;
-
 	}else{
 		std::cout << std::endl;	
 		std::cout << "I am sorry " << " [Auction player custom name]" <<
@@ -106,38 +135,8 @@ int Zoo::Auction(){
 		<< " and " << which_animal << "." << std::endl;
 		Auction();
 	}
-	return total_cost;
+	return;
 }
-/* ***************************************************************************************
- * Function name: Income().
- * Description: This function will return the income generated from owning
- * 		the number of animals in the zoo.
- * Parameters: -
- * Pre-conditions: -
- * Post-conditions: Returns the floating point value that is deposited into
- * 		    the player's bank account
- * **************************************************************************************/
-float Zoo::Income(){
-	float income = 0.0;
-	// The case for an empty Zoo.
-	if(this->m_all_animals[0] == NULL){
-		return income;
-	}else{
-		for(int i = 0; i < this->m_num_animals; i++){
-			// earn_revenue() returns the correct value earned of each animal.
-			// The parameter is 0 becuase the bonus is handled elsewhere.
-			income += this->m_all_animals[i]->earn_revenue(0);		
-		}
-		std::cout << std::setprecision(2);
-		std::cout << std::endl << std::endl
-		<< "Income earned this month excluding any bonusses: $" << income
-		<< std::endl;
-	}
-	// This returns the total income earned by the player per round.
-	return income;
-}
-
-
 /* ***************************************************************************************
  * Function name: Expenses().
  * Description: This function will calculate the expenses based on the base cost for the
@@ -159,7 +158,7 @@ float Zoo::Expenses(float perc){
 	// This will determine which quality food the user buys for his/her animals.
 	// The food type starts at regular each round and it will only be changed of the
 	// user chooses another food type.
-	float fd_type = 1;
+	int fd_type = 1;
 	if(m_which_food == "premium"){
 		fd_type = 2;
 	}else if(m_which_food == "cheap"){
@@ -175,109 +174,10 @@ float Zoo::Expenses(float perc){
 		}
 	}
 	// Return by value.
-	std::cout << "\n*** This months food cost: $" << total << std::endl << std::endl;
-
 	return total;
 }
 /* ***************************************************************************************
- * Function name: Hospital()
- * Part I of Random_event().
- * Description: This function will be used when an animal gets sick.
- * 		It will accept the total of the player's bank account,
- * 		determine randomly which animal get's sick and then
- * 		bill the player automatically if he can afford it.
- * 		Else it will return 0 and the animal dies.
- * ParametersL int.
- * Pre-conditions: The function will make sure that there is at least one animal
- * 			in the Zoo.
- * Post-condtions: Returns the medical cost associated with the animal's illness.
- * 			Else return 0 if the user can't afford it.
- * **************************************************************************************/
-int Zoo::Hospital(int bank_total){
-	std::cout << std::setprecision(2);
-	// First determine if there is at least one animal in the Zoo.
-	if(this->m_all_animals[0] != NULL){
-		// Case if the user can afford the medical cost.
-		int i = rand() % m_num_animals;
-		int medical_cost = (*this)[i]->get_sick();	
-		//if((*this)[i]->is_baby()){
-			// If the age is 6 months or less than it is a baby.
-			// A baby cost twice ass much when they get sick.
-		//	medical_cost *= 2;	
-		//}
-		// Output to the user.
-		std::cout << "[Caution]: A " << (*this)[i]->get_type() << " of age " 
-		<< (*this)[i]->get_age_months() << " is unhealthy.\nMedical attention needed!!!" 
-		<< std::endl << "[Medical cost]: $ " << medical_cost << std::endl; 
-		// Determine if the user can afford it.
-		if(bank_total >= medical_cost){
-			// The player.bank() function will subtract the expenses.
-			std::cout << "[Medical bill sent, the vetenary says that the " 
-			<< (*this)[i]->get_type() << " will recover quickly]." << std::endl;
-			// The function will return the cost associated.
-			return medical_cost;
-		}else{
-			std::cout << "[The vetenary reported that your  " << (*this)[i]->get_name() 
-			<< " - "<< (*this)[i]->get_name() << "- , age "<< (*this)[i]->get_age_months() 
-			<< " has died]." << std::endl;
-			// Animal removed from the Zoo.
-			swap((*this)[i], (*this)[m_num_animals - 1]);
-			--(*this);
-		}
-	}
-	int no_cost = 0;
-	return no_cost;
-}
-/* ***************************************************************************************
- * Function name: babies_born()
- * Description: This funcion will be called when the second random event occurs.
- * 		It makes use of search_adult() to ensure that there is at least
- * 		one animal in the zoo that is an adult (age > 48 months) since they
- * 		are the only animals allowed to have babies.
- * Parameters: -
- * Pre-conditions: -
- * Post-conditions: The function inserts the new animals babies in the array of Animal*'s
- * 		    if there is at least one adult in the Zoo. Else it will print out
- * 		    to the user that there is no animals old enough to deliver a baby.
- * ***************************************************************************************/
-void Zoo::babies_born(){
-	// This get's the index of the random adult selected to give babies.
-	// If there is no adults on the zoo, search_adult() will return -1.
-	int i = search_adult((*this));
-	if(i > -1){
-		std::cout << "*** A total of " <<(*this)[i]->give_birth() 
-		<< " new babies are born." << std::endl;
-		// give_birth() returns the number of babies that the animal delivers.
-		for(int j = 0; j < (*this)[i]->give_birth(); j++){
-			// This creates space in the Zoo for the new born.
-			++(*this);				
-			if( (*this)[i]->get_type() == "Bear"){
-				// The last element in the array that stores the animals is empty.
-				// #### Remove default date and change to current date.
-				this->m_all_animals[m_num_animals - 1] = new Bear("zoo", Date());
-			}else if( (*this)[i]->get_type() == "Sea lion"){
-				// The last element in the array that stores the animals is empty.
-				// #### Remove default date and change to current date.
-				this->m_all_animals[m_num_animals - 1] = new Sea_lion("zoo", Date());
-			}else if( (*this)[i]->get_type() == "Tiger"){
-				// The last element in the array that stores the animals is empty.
-				// #### Remove default date and change to current date.
-				this->m_all_animals[m_num_animals - 1] = new Tiger("zoo", Date());
-			}else{
-				std::cout << "[babies_born()]: Error, no type for animal exist" 
-				<< std::endl;
-			}
-		}
-	}else{
-		std::cout << "\n[There is no animal old enough to deliver babies.]\n"<< std::endl;
-	
-	}
-	return;
-}
-
-/* ***************************************************************************************
  * Function name: attendence_boom().
- * Part III of Random_event().
  * Description: This function will be called when there is a boom in attendence
  * 		and the Sea lions generate extra profit. It will tell the user
  * 		that there was a boom in attendance but because he/she had no Sea lion,
@@ -299,111 +199,8 @@ int Zoo::attendance_boom(){
 	// This is if there are no Sea lions in the Zoo.
 	std::cout << std::endl
 	<< "You had a boom in the attendance at the Zoo but becuase you do " <<
-	"\nnot have any sea lions, you did not receive additional funds." << std::endl;
+	"not have any sea lions, you did not receive additional funds." << std::endl;
 	return 0;
-}
-
-/* ***************************************************************************************
- * Function name: Random_events().
- * Description: This function will make use of a reference to instances of
- * 		the Player class and the Probability class. It will execute the random
- * 		event based on the probability of each one of them. This function will 
- * 		get called once per round and it simulates 4 random events that can occur
- * 		during a single round.
- * 		0 - An animal gets sick and the user needs to pay the medical bill, 
- * 		1 - A randomly selected adult gives birth to the x number of babies,
- * 		2 - An increase in attendance of the Zoo, Sea lions produce more revenue,
- * 		3 - No special event occurs.
- * Parameters: Player&, const Probability&.
- * Pre-conditions: The function will execute once per round.
- * Post-conditions: The funcion will simulate one of the 4 events possible for each 
- * 		    round.
- * **************************************************************************************/
-void Zoo::Random_events(Player& player, const Probability& p){
-	std::cout << std::setprecision(2);
-	std::cout << "************************************************************"<<
-	"***********" << std::endl;
-	// Returns an integer between 0 - 3, inclusively.
-	const int event = p.get_event();
-	if(event == 0){	
-		// This is when an animal turns ill.
-		player.get_bank() -= this->Hospital(player.get_bank());
-	}else if(event == 1){
-		// This is when a new babies is born in the Zoo.
-		this->babies_born();
-	}else if(event == 2){
-		// This is when there is an increase in attendence and the Sea lions 
-		// produce more income.
-		std::cout << "There was a great increase in attendance at the Zoo." 
-		<< std::endl;
-		player.get_bank() += this->attendance_boom();
-	}else if(event == 3){	
-		// No special event occured.
-		std::cout << "\nNothing interesting happend this round.\n" << std::endl;
-	}
-	std::cout << "[current total:] $ " << player.get_bank() << std::endl;
-	std::cout << "************************************************************"<<
-	"***********" << std::endl;
-	return;
-}
-/* ***************************************************************************************
- * Function name: x_month_older().
- * Description: This function will increase the age of all the animals in the
- * 		zoo by one the integer specified as as the argument of the function.
- * Parameters: int.
- * Pre-conditions: The function will default to one month increase.
- * 		   The function will determined if there is at least one animal in the
- * 		   zoo before trying to increase the animals' age.
- * Post_conditions: All the animals in the Zoo are x months older.
- * **************************************************************************************/
-void Zoo::x_month_older(int num_month){
-	// This is so when the Zoo is empty.
-	if((*this)[0] == NULL){
-		return;
-	}
-	assert(num_month > 0 && "Make sure that you increase the age by at least one.");
-	// Case when the Zoo has at least one animal.
-	for(int i = 0; i < this->m_num_animals; i++){
-		this->m_all_animals[i]->get_age_months() += num_month;
-	}
-}
-
-
-/* ***************************************************************************************
- * Function name: which_food().
- * Description: This function will set the food type that the user selects for its animals.
- * 		- "Cheap": Half of base price.
- * 		- "Regular": Base price.
- * 		- "Preimium": Double of base price.
- * Parameters: -
- * Pre-conditions: This funcion only changes the m_which_food variable.
- * Post-conditions: The type of food used in the Zoo is set.
- * **************************************************************************************/
-void Zoo::which_food(){
-	std::cout << std::endl
-	<< "Please select the type of food that you want to feed your "<< this->m_num_animals
-	<< " animals.\n\n" 
-	<< "a.) Cheap - 1: Price is half of the base price but it will increase the" <<
-	" probability of getting sick animals.\n" 
-	<< "b.) Regular - 2: Price is the base price" <<
-	" probability of getting sick animals is not affected.\n" 
-	<< "c.) Premium - 3: Price is double of the base price but it will decrease the" <<
-	" probability of getting sick animals." << std::endl;
-	std::string tmp = "";
-	std::cin >> tmp;
-	if(tmp == "1"){
-		m_which_food = "cheap"; 
-	}else if(tmp == "2"){
-		m_which_food = "regular"; 
-	}else if(tmp == "3"){
-		m_which_food = "premium"; 
-	}else{
-		std::cout << std::endl << std::endl
-		<< "Please enter an integer between 1 - 3 to select you food choice.\n"
-		<< std::endl << std::endl;
-		this->which_food();
-	}
-	return;
 }
 /* ***************************************************************************************
  * Function name: operator[]().
@@ -428,30 +225,6 @@ Animal*& Zoo::operator[](int i){
 	// pointer, the function returns a reference to the instance of an Animal.
 	return m_all_animals[i];
 }
-/* ***************************************************************************************
- * Function name: operator[]().
- * Description: This function will return an Animal* becuase
- * 		I don't know which inhereted class will be needed by the program.
- * 		This function will be private because if a user does not store
- * 		dynamic memory in the array of animals the destructor will try to
- * 		free it which will lead to a seg fault.
- * Parameters: int.
- * Pre-conditions: Assumes that there are animals in the Zoo but the function
- * 		   will use assert to determine it.
- * Post-conditions: The subscript operator returns a
- * 		    Animal* at the index specified.
- * **************************************************************************************/
-Animal* Zoo::operator[](int i) const{
-	assert(i >= 0 
-	&& "[operator[]()]: The Zoo does not have negative indices");
-	// The program should not try to access an animal that is not there.
-	//assert(m_all_animals[i] = NULL 
-	//&& "[operator[]()]: There is no animal at the index you specified.");
-	// m_all_animals is an array of Animal*. Therefore by deferencing the
-	// pointer, the function returns a reference to the instance of an Animal.
-	return m_all_animals[i];
-}
-
 
 /* ***************************************************************************************
  * Function name: operator++().
@@ -527,13 +300,14 @@ Zoo& Zoo::operator--(){
 std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){ 
 	stream_out << std::setprecision(3) << std::left;
 	stream_out << std::endl;
-	stream_out << "-------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------------" 
 	<< std::endl;
 	stream_out << std::setw(12) << "| Id-number" 
 	<< std::setw(12) << "Name " << 
 	std::setw(12) << "Type"<< std::setw(7) << "Age" <<
+	std::setw(17) << "Date of Purchase" <<
 	std::setw(15)<< "Birth Place |" << std::endl;
-	stream_out << "-------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------------" 
 	<< std::endl;
 	for(int i = 0; i < zoo.m_num_animals; i++){
 		if(zoo.m_all_animals[i] != NULL){
@@ -541,7 +315,7 @@ std::ostream& operator<<(std::ostream& stream_out, const Zoo& zoo){
 		}
 	}
 
-	stream_out << "-------------------------------------------------------------" 
+	stream_out << "-------------------------------------------------------------------" 
 	<< std::endl;
 	return stream_out;
 }
@@ -619,9 +393,6 @@ Zoo& Zoo::operator=(const Zoo& old_z){
 	return *this;
 }
 
-// =======================
-// Non-member functions.
-// =======================
 /* ***************************************************************************************
  * Function name: swap()
  * Description: This is not a member function but it is used inside the Hospital()
@@ -636,37 +407,4 @@ void swap(Animal* a1, Animal* a2){
 	a2 = tmp;
 	return;
 }
-/* ***************************************************************************************
- * Function name: search_adult()
- * Description: This function will randomly search thorught the Animal* array and return
- * 		the index of an adult. It will return -1 if there is no adult in the Zoo.
- * Parameters: const Zoo&.
- * Pre-condtions: The function makes no assumptions on the animals present in the Zoo.
- * Post-conditions: It returns the index of the Animal* pointer that is an adult.
- * ***************************************************************************************/
-int search_adult(const Zoo& zoo){
-	// This is when there is an empty Zoo.
-	if( (zoo[0]) == NULL){
-		return -1;
-	}
-	// This make sure that there is at least one adult in the Zoo to give birth.
-	bool adult_exist = 0;
-	for(int i = 0; i < zoo.get_num_animals(); i++){
-		if( (zoo[i])->is_adult() ){
-			adult_exist = 1;
-			break;
-		}	
-	}
-	// This will randomly search for a animal in the Zoo that can give birth.
-	int i = -1;
-	// The if statement will only execute if there was an adult found.
-	if(adult_exist){
-		do{
-			i = rand() % zoo.get_num_animals();
-		// The loop will stop if the randomly selected animal is an adult.	
-		}while( !( (zoo[i])->is_adult() ) );
-	}
-	// The funcion will return -1 if there was no adult to give birth.
-	// Otherwise it will return the index of the animal that will give birth.
-	return i;
-}
+

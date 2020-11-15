@@ -96,15 +96,17 @@ float& Player::get_bank(){
 void Player::set_info(){
 	std::cout << std::fixed;
 	std::cout << std::endl 
-	<< "---------------------------------------------------------------------------\n"
+	<< "======================================================================="
+	<< "====================\n"
 	<< "Enter your name here: ";
 	std::cin >> this->m_name;
 	std::cout << "Enter the name of your bank where I should deposit the $100 000"
 	<< " to get you started: " << std::endl;
 	std::cin.ignore(256 ,'\n');
 	std::getline(std::cin, this->m_bankname);
-	std::cout << "----------------------------------------------------------"
-	<< "-----------------" << std::endl;
+	std::cout 
+	<< "======================================================================="
+	<< "====================" << std::endl;
 	// This lets the user think that the money is being deposited.
 	std::cout << std::endl;
 	std::cout << "Give me a moment to deposit the money in your account.\n";
