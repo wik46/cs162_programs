@@ -30,13 +30,6 @@
 
 
 #include "Event.h"
-
-#include "Bat.h"
-#include "Gold.h"
-#include "Pit.h"
-#include "Wumpus.h"
-
-
 #include <iostream>
 int main(){
 	// These symbols will represent the Events in the grid.
@@ -47,64 +40,22 @@ int main(){
 	// *** Note *** that Event will be an abstract class because action will be a pure
 	// virtual function. Therefore if you want to test this class comment out
 	// the action() function.
-	
-	// 1. Creating a child of Event.
-	Bat b1(true);
-	Event* e_b1 = &b1;
-	// 2. Creating a child of Event.
-	Gold g1;
-	Event* e_g1 = &g1;
-	// 3. Creating a child of Event.
-	Pit p1(true);
-	Event* e_p1 = &p1;
-	// 4. Creating a child of Event.
-	Wumpus w1;
-	Event* e_w1 = &w1;
-
+	Event e1(symbol1, "I am e1", true);
+	Event e2(symbol2, "I am e2", false);
 	// 1. Showing that display() only prints the symbol of the Event if m_debug = true.
-	std::cout << "1. std::cout <<"  << std::endl;
+	std::cout << "1. display()"  << std::endl;
+	std::cout << e1 << std::endl;
+	std::cout << e2 << std::endl;
 	std::cout << "+++" << std::endl;
-	std::cout << "a.1 " << b1 << std::endl;
-	std::cout << "a.2 " << *e_b1 << "// as Event* "<< std::endl;
-	std::cout << "b.1 " << g1 << std::endl;
-	std::cout << "b.2 " << *e_g1 << " // as Event*" << std::endl;
-	std::cout << "c.1 " << p1 << std::endl;
-	std::cout << "c.2 " << *e_p1 << " // as Event*" << std::endl;
-	std::cout << "d.1 " << w1 << std::endl;
-	std::cout << "c.2 " << *e_w1 << " // as Event* " << std::endl;
-	std::cout << "+++" << std::endl;
-	std::cout << std::endl;
-	std::cout << "2. display()"  << std::endl;
-	// This function should be used to display the symbol in the grid.
-	std::cout << "***" << std::endl;
-	b1.display();
-	std::cout << "***" << std::endl;
-	g1.display();
-	std::cout << "***" << std::endl;
-	p1.display();
-	std::cout << "***" << std::endl;
-	w1.display();
-	std::cout << "***" << std::endl;
-	std::cout << std::endl;
+	e1.display();
+	e2.display();
 	std::cout << "+++" << std::endl;
 	
 	// 2. Showing that the Events make a unique sound.
-	std::cout << "3. make_sound()"  << std::endl;
+	std::cout << "2. make_sound()"  << std::endl;
 	std::cout << "----" << std::endl;
-	// As an Child of Event.
-	b1.make_sound();
-	// As an Event*.
-	e_b1->make_sound();
-	// -----
-	g1.make_sound();
-	e_g1->make_sound();
-	// As an Child of Event.
-	p1.make_sound();
-	// As an Event*.
-	e_p1->make_sound();
-	// -----
-	w1.make_sound();
-	e_w1->make_sound();
+	e1.make_sound();
+	e2.make_sound();
 	std::cout << "----" << std::endl;
 	return 0;
 }

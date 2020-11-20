@@ -24,7 +24,13 @@ public:	// Member variables.
 	Event* m_event;
 public:	
 	Event* get_event(){return m_event;}
-
+	bool is_empty(){
+		if(!m_event){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	// Member functions.
 	// ========================
 	// Hard Working functions.	

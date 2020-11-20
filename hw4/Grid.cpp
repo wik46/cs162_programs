@@ -31,10 +31,30 @@
 // Hard working functions.
 // =======================================================================================
 /* ***************************************************************************************
+ * Function name: init()
+ * Description: The constructor of Grid will insert all the Room instance in the grid.
+ * 		This function will be used to insert the Event* inside the rooms. It will
+ * 		only insert them in order and then the random_shuffle() will
+ * 		shuffle the grid. It will first determine if their is not already
+ * 		an Event* in the Room. If there is one it will delete it.
+ * Parameters: -
+ * Pre-conditions: Assumes that the Grid already has Rooms in it after construction.
+ * Post-conditions: This function sets all the 
  * ***************************************************************************************/
 
 /* ***************************************************************************************
+ * Function name: random_shuffle()
+ * Description: This function will make used of the random_shuffle() defined in the 
+ * 		std::vector container. It will be used after init() that is used to 
+ * 		set give all the Rooms alreay in the grid the events that they need.
+ * 		This function will shuffle all the Rooms in the grid and must be used 
+ * 		directly after init().
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
  * ***************************************************************************************/
+
+
 /* ***************************************************************************************
  * ***************************************************************************************/
 

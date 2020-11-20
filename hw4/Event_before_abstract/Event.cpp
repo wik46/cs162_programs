@@ -25,6 +25,7 @@
  * ***************************************************************************************/
 
 #include "Event.h"
+//#include "Room.h"
 #include <iostream>
 
 // =======================================================================================
@@ -97,12 +98,7 @@ void Event::make_sound() const{
  * ***************************************************************************************/
 // This displays the sound of the Event.
 std::ostream& operator<<(std::ostream& stream_out, const Event& e){
-	if(e.m_debug_mode)
-		stream_out << e.m_symbol;
-	// Prints out the space where the charater should have been.
-	else{
-		stream_out << ' ';
-	}
+	stream_out << e.m_symbol;
 	return stream_out;
 } 
 // =======================================================================================

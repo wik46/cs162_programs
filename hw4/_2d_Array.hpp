@@ -66,8 +66,11 @@ public:
 	_2d_Array& operator=(const _2d_Array&) = delete;
 	// 2. This one will be used to insert one data type into the array.
 	_2d_Array& operator=(T);
-	// Getter
+	// 1. Getter
 	std::vector<std::vector<T> >& get_v(){m_array;}
+	// 2. Getter: Use only for square n x n containers.
+	int get_dim(){return m_array.size();}
+	
 	// ======================
 	// Functionality:
 	// ======================

@@ -1,11 +1,13 @@
 /* ***************************************************************************************
- * Filename: Event.cpp
+ * Filename: Pit.cpp
  * Author: Lodewyk Jansen van Rensburg
  * Date: November 22, 2020.
  * Assignment: Homework 4.
- * Description: This it the implementation file for my Event class.
+ * Symbol: 'p'
+ * Description: This is the implementation file for the Pit class.
+ * 		This class is a child with parent Event class.
  * 		An Event will be an abstract class with the following children.
- * 			1. Wumpus,
+ * 			1. Pit,
  * 			2. Gold, 
  * 			3. Bats, and
  * 			4. Pit.
@@ -25,6 +27,7 @@
  * ***************************************************************************************/
 
 #include "Event.h"
+#include "Pit.h"
 #include <iostream>
 
 // =======================================================================================
@@ -39,14 +42,10 @@
  * Pre-conditions: Prints based on the truth value of m_debug_mode.
  * Post-conditions: Only prints if m_debug_mode == TRUE.
  * ***************************************************************************************/
-void Event::display() const{
-	// If this is true then is means that the instance was created to be printed 
-	// to the screen in debug_mode.
-	if(m_debug_mode){
-		std::cout << m_symbol << std::endl;
-	}
-	return;
-}
+// =====================
+// Defined in Event.cpp
+// =====================
+
 /* ***************************************************************************************
  * Function name: make_sound()
  * Description: This function will print out the sound that the event makes when the
@@ -56,12 +55,10 @@ void Event::display() const{
  * Post-conditions: It will be used to let the player know that the event is in an 
  * 			adjacent room.
  * ***************************************************************************************/
-void Event::make_sound() const{
-	// If this is true then is means that the instance was created to be printed 
-	// to the screen in debug_mode.
-	std::cout << m_sound << std::endl;
-	return;
-}
+// =====================
+// Defined in Event.cpp
+// =====================
+
 /* ***************************************************************************************
  * Function name: action()
  * Description: This function will perform the action on the user.
@@ -70,7 +67,7 @@ void Event::make_sound() const{
  * 		2. The user receives gold. The gold gets picked up but the user still
  * 		   needs to go back to his/her initial block to exit the game.
  * 		3. The user enters a cave with bats and the user gets moved to a new
- * 		   cage that may or may not contains the Wumpus.
+ * 		   cage that may or may not contains the Pit.
  * 		4. The user falls into a pit and dies. Therefore an endgame exception
  * 		   is thrown.
  * Parameters: -
@@ -95,22 +92,17 @@ void Event::make_sound() const{
  * Pre-conditions: Assumes that the Event is constructed with a m_symbol member.
  * Post-conditions: Prints the m_symbol of the event to the screen.
  * ***************************************************************************************/
-// This displays the sound of the Event.
-std::ostream& operator<<(std::ostream& stream_out, const Event& e){
-	if(e.m_debug_mode)
-		stream_out << e.m_symbol;
-	// Prints out the space where the charater should have been.
-	else{
-		stream_out << ' ';
-	}
-	return stream_out;
-} 
+// This displays the symbol of the Event.
+// =====================
+// Defined in Event.cpp
+// =====================
+
 // =======================================================================================
 // Constructors.
 // =======================================================================================
 /* ***************************************************************************************
- * Function name: Event()
- * Description: This is the default constructor. The used must create the instace as 
+ * Function name: Pit()
+ * Description: This is the default constructor. The used must create the instance as 
  * 		follows:
  * 			1. m_sound = The sound that the event makes when the user
  * 			   	     is in an adjacent room.
@@ -120,8 +112,8 @@ std::ostream& operator<<(std::ostream& stream_out, const Event& e){
  * 					screen/grid.
  * ***************************************************************************************/
 // The default consrtuctor.
-Event::Event(char symbol, const char* sound, bool debug_mode)
-:m_sound{sound}, m_debug_mode{debug_mode}, m_symbol{symbol}
+Pit::Pit(bool debug_mode)
+:Event('p', "You feel a breeze...", debug_mode)
 {}
 // =======================================================================================
 // The big three.
