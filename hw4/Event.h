@@ -11,7 +11,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-
 #include <iostream>
 class Event{
 	// Member variables.
@@ -40,6 +39,15 @@ public:
 	// =====================
 	// This displays the symbol of the Event.
 	friend std::ostream& operator<<(std::ostream&, const Event&); 
+	// ==============
+	// Getters.
+	// ==============
+	// 1.
+	std::string get_sound(){return m_sound;}
+	// 2. 
+	bool get_debug_mode(){return m_debug_mode;}
+	// 3.
+	char get_symbol(){return m_symbol;}
 	// ==============
 	// Constructors.
 	// ==============

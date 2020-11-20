@@ -7,7 +7,11 @@
  * Input: -
  * Output: -
  * **************************************************************************************/
-
+//
+//
+//  REMEMBER THA RANDOM FUNCTION THAT CAN SHUFFLE A VECTOR.
+//
+//
 #ifndef ROOM_H
 #define ROOM_H
 
@@ -19,6 +23,8 @@ public:	// Member variables.
 	// This will store a child of the Event class or be empty.
 	Event* m_event;
 public:	
+	Event* get_event(){return m_event;}
+
 	// Member functions.
 	// ========================
 	// Hard Working functions.	
@@ -56,5 +62,9 @@ public:
 	// 1. Destructor.
 	~Room();
 };
+// Used alongside std::find to find the wumpus or gold at the end of the game
+// 	so that they can be replaced if necesssary.
+//bool IsWump(const Room& r);
+//bool IsGold(const Room& r);
 
 #endif 

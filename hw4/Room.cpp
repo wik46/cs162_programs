@@ -48,8 +48,10 @@
  * **************************************************************************************/
 void Room::display() const {
 	// This also makes sure that there is an Event in the Room.
-	if(m_event != NULL){
+	if(m_event){
 		m_event->display();
+	}else{
+		std::cout << "[No room]"<< std::endl;	
 	}
 	return;
 }
@@ -133,7 +135,9 @@ std::ostream& operator<<(std::ostream& stream_out, const Room& room){
  * **************************************************************************************/
 // The default consrtuctor.
 Room::Room(Event* e): m_event(e)
-{}
+{
+	std::cout << "Room constructor. "<< std::endl;
+}
 // ==============
 // The big three.
 // ==============
@@ -149,7 +153,24 @@ Room::Room(Event* e): m_event(e)
  * **************************************************************************************/
 Room::~Room(){
 	// NB!! Make sure you are instantiating the class with dynamic memory.
-	if(m_event != NULL){
+	if(m_event){
+		std::cout << "** The Room destructor."  << std::endl;
 		delete m_event;
+		m_event = NULL;
 	}
 }
+
+
+// =======================================================================================
+// Non-member functions.
+// =======================================================================================
+/// The function needed by std::find to determine if two events are equal.
+// 1. Used to find the Wumpus.
+//bool IsWump(const Room& r){
+//	return( r.get_event()->get_symbol() == 'w');
+//}
+// 2. Used to find the Gold.
+//bool IsGold(const Room& r){
+//	return( r.get_event()->get_symbol() == 'g');
+//}
+
