@@ -17,7 +17,7 @@
 
 #include "Player.h"
 #include "Vec2d.h"
-
+#include "Event.h"
 #include <cassert> 
 #include <unistd.h>
 #include <iostream>
@@ -147,8 +147,27 @@ std::string Player::get_name() const{
 	return m_name;
 }
 /* ***************************************************************************************
- * Function name: get_bankname().
+ * Function name: get_current_pos().
+ * Description: This function will be used to get access 
+ * 		to the current position of the player.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Return the current position of the player.
  * **************************************************************************************/
+Vec2d& Player::get_current_pos(){
+	return m_current_pos;
+}
+/* ***************************************************************************************
+ * Function name: get_initial_pos().
+ * Description: This function will be used to get access to the initial 
+ * 		position of the player.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Return the initial position of the player.
+ * **************************************************************************************/
+Vec2d& Player::get_init_pos() {
+	return m_init_pos;
+}
 
 /* ***************************************************************************************
  * Function name: get_num_arrows().
@@ -239,8 +258,9 @@ void Player::set_info(){
  * Post-conditions: The player instance is initialized with all its members variables
  * 			set to the correct values.
  * **************************************************************************************/
-Player::Player(const Vec2d& init, const Vec2d& current, unsigned int total)
-: m_has_gold{false}, m_init_pos{init}, m_current_pos{current}, m_num_arrows{total}
+Player::Player(const Vec2d& init, const Vec2d& current, bool debug_mode, unsigned int total)
+:Event('$', " ", debug_mode)
+, m_has_gold{false}, m_init_pos{init}, m_current_pos{current}, m_num_arrows{total}
 {
 	set_info();
 }

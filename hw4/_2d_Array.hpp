@@ -21,6 +21,8 @@
 #define _2D_ARRAY_HPP
 
 #include "Vec2d.h"
+
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <iomanip>
@@ -51,7 +53,7 @@
 // function templates.
 template <class T>
 class _2d_Array{
-//public:	// This will represent the array.
+public:	// This will represent the array.
 	// This is an array of vectors. "vector of vectors"
 	std::vector< std::vector<T> > m_array;
 	// This function will be used to print the contents of the array.
@@ -77,9 +79,13 @@ public:
 	// 1. This function will return true of the head of the mathematical vector
 	// is inside the grid.
 	bool is_inside(const Vec2d&);
+	// ## This function is commited out because it sets my Event* to non NULL. If it
+	// 	is virtual.
 	// 2. This function will be used to perform an action on all the block N/E/S/W
 	// 	from the head of the vector passed to the function.
 	//virtual void search_around(const Vec2d&);
+	// 3. This function will shuffle the 2d array.
+	void random_shuffle();
 	// =====================
 	// Displaying the array.
 	// =====================
@@ -207,6 +213,34 @@ void _2d_Array<T>::search_around(const Vec2d& v){
 	return;
 }
 */
+
+/* ***************************************************************************************
+ * Function name: shuffle()
+ * Description: This function shuffles all the elements inside the vector of vectors.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
+ * **************************************************************************************/
+template <class T>
+void _2d_Array<T>::random_shuffle(){
+
+	// Declaring the iterators.
+	// a. This iterator is like the pointer to the first element of the 2d container.
+	// std::vector has random access iterators.
+	// b. This is like a pointer to the first element of each 1d constainer.
+	// Shuffeling the container
+	// =========================
+	// a. Shuffle the rows of the columns.
+	/*std::random_shuffle(m_array.begin(), m_array.end());
+	for(auto it_out = m_array.begin(); it_out != m_array.end(); it_out++){
+		// This shuffles the current row in the 2d container.
+		std::random_shuffle(it_out->begin(), it_out->end());
+	}	
+
+	std::random_shuffle(m_array.begin(), m_array.end());
+*/
+}
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Display:
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -224,6 +258,7 @@ void _2d_Array<T>::search_around(const Vec2d& v){
  * **************************************************************************************/
 template <typename T>
 void _2d_Array<T>::print_with_grid(bool index){
+	std::cout << std::endl;	
 	print_line(m_array.size());
 	std::cout << std::endl;
 	print_space(m_array.size());
@@ -262,6 +297,7 @@ void _2d_Array<T>::print_with_grid(bool index){
 // n is the number of elements in the container.
 template <class T>
 void _2d_Array<T>::print_line(int n){
+
 	std::cout << "x";
 	for(int i = 0; i < n; i++){
 		std::cout << std::setfill ('*')<< std::setw(6) << 'x';

@@ -153,7 +153,8 @@ Room::Room(Event* e): m_event{e}
  * **************************************************************************************/
 Room::~Room(){
 	// NB!! Make sure you are instantiating the class with dynamic memory.
-	if(m_event){
+	// THE SECOND CONDIION IS SO THAT THE ROOM DESTRUCTOR DOES NOT DESTROY STATIC PLAYER MEMBER
+	if(m_event && m_event->get_symbol() != '$'){ // The dollar is the symbol of the player <<<=============
 		std::cout << "** The Room destructor."  << std::endl;
 		delete m_event;
 		m_event = NULL;

@@ -149,6 +149,7 @@ int main(){
 
 	//}
 	// Outputting the grid.
+	//grid.random_shuffle();
 	grid.print_with_grid();	
 	std::cout << std::endl;
 	grid.empty_rooms();

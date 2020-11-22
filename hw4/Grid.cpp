@@ -27,7 +27,9 @@
 #include "Gold.h"
 #include "Pit.h"
 #include "Wumpus.h"
+#include "Player.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iomanip>
 #include <iostream>
@@ -70,7 +72,7 @@ void Grid::init(bool debug_mode){
 				// ====
 				get_v()[i][j].insert(new Pit(debug_mode));
 			}
-			// 2. Inserting the Wumpus and the Gold
+			// 2. Inserting the Wumpus and the Gold 
 			// ==========================================================
 			if( i == 1 && j == 0){
 				// ===== This will delete the event from the room if it does have an Event*
@@ -85,11 +87,45 @@ void Grid::init(bool debug_mode){
 					delete get_v()[i][j].remove();
 				}
 				// ====
-				get_v()[i][j].insert(new Wumpus(debug_mode));
+				get_v()[i][j].insert(new Wumpus(debug_mode));		
 			}
 		}
 	}	
 }	
+
+// This function will be used to insert the player randomly after the 
+// 	gameboard was shuffled.
+/*
+ * Function name: insert_player()
+ * Description: This function inserts a player randomly into a game board, as well
+ * 		as saves the player's init and current position.
+ * Parameters: The Player is a child of Event*
+ * Pre-condtitions: -
+ * Post-conditions: -
+ * */
+void Grid::insert_player(Event* $){ // The dollar is the player symbol
+	
+	int i_e = 0, j_e = 0;
+	do{
+		// Calculate a random space to insert the player.
+		i_e = rand() % (get_v().size());
+		j_e = rand() % (get_v().size());
+		// Seeing if I can remove a grid from full room to an empy room.
+		// If the room is empty, the the function will insert the player, else
+		// 	it will search for another one.
+	// Continue searching if the Room is not empty.
+	}while( !get_v()[i_e][j_e].is_empty() );// If this room is not empty.	
+	
+	// Inserting the Player instance into the empty room.
+	get_v()[i_e][j_e].insert( $ ); 
+	// Setting the initial and current position for my player.
+	$->get_init_pos() = Vec2d(i_e, j_e);
+	$->get_current_pos() = Vec2d(i_e, j_e);
+			
+	return;
+}
+
+/// THIS FUNCTION MAKES MY INIT AND EMPTY FUNCTINOS PRODUCES A SEG FAULT.
 /* ***************************************************************************************
  * Function name: random_shuffle()
  * Description: This function will make used of the random_shuffle() defined in the 
@@ -101,9 +137,23 @@ void Grid::init(bool debug_mode){
  * Pre-conditions: -
  * Post-conditions: -
  * ***************************************************************************************/
+void Grid::random_shuffle(){
 
-
-/*
+	for(int i = 0; i < get_v().size(); i++){
+		for(int j = 0; j < get_v()[i].size(); j++){
+			// Assuming a square grid.
+			int i_e = rand() % (get_v().size());
+			int j_e = rand() % (get_v().size());
+			// Seeing if I can remove a grid from full room to an empy room.
+			if(get_v()[i_e][j_e].is_empty()   // If this room is empty.
+			&& !(get_v()[i][j].is_empty() )){ // If this room is not empty.	
+				get_v()[i_e][j_e].insert(  get_v()[i][j].remove() ); 
+			}
+		}
+	}
+	return;
+}
+/* ***************************************************************************************
  * Function name: empty_rooms()
  * Description: This function will iterate through the entire Grid of rooms
  * 		and empty the room if it contains any event inside.
@@ -112,7 +162,7 @@ void Grid::init(bool debug_mode){
  * Parameters: bool to depend if the function should empty. Set to true by default.
  * Pre-conditions: -
  * Post-conditions: If the parameter was set to true, all the rooms in the grid are empty.
- * */
+ * **************************************************************************************/
 void Grid::empty_rooms(bool exec){
 	// This function will not clean the Rooms in the grid if the parameter is false.
 	if(exec){
@@ -120,7 +170,6 @@ void Grid::empty_rooms(bool exec){
 			for(int j = 0; j < get_dim(); j++){			
 				// ===== This will delete the event from the room if it does have an Event*
 				if(!(get_v()[i][j]).is_empty()){
-					std::cout << i << " :Just before delete empty_rooms()"<< std::endl;
 					delete get_v()[i][j].remove();
 				}		// ====
 			}	
@@ -165,20 +214,19 @@ void Grid::search_around(const Vec2d& v) {
 		// ** The second condition determines of the room is empty.
 		if(is_inside(vN) && !get_v()[vN.get_x()][vN.get_y()].is_empty()){
 			// Going up and down rows is is moving parallel to the y axis
-			
-			get_v()[vN.get_y()][vN.get_x()].get_event()->make_sound();
+			get_v()[vN.get_x()][vN.get_y()].get_event()->make_sound();
 		}
-		if(is_inside(vE) && !get_v()[vE.get_y()][vE.get_x()].is_empty()){
+		if(is_inside(vE) && !get_v()[vE.get_x()][vE.get_y()].is_empty()){
 			// Going up and down rows is is moving parallel to the y axis
-			get_v()[vE.get_y()][vE.get_x()].get_event()->make_sound();
+			get_v()[vE.get_x()][vE.get_y()].get_event()->make_sound();
 		}
-		if(is_inside(vS) && !get_v()[vS.get_y()][vS.get_x()].is_empty()){
+		if(is_inside(vS) && !get_v()[vS.get_x()][vS.get_y()].is_empty()){
 			// Going up and down rows is is moving parallel to the y axis
-			get_v()[vS.get_y()][vS.get_x()].get_event()->make_sound();
+			get_v()[vS.get_x()][vS.get_y()].get_event()->make_sound();
 		}
-		if(is_inside(vW) && !get_v()[vW.get_y()][vW.get_x()].is_empty()){
+		if(is_inside(vW) && !get_v()[vW.get_x()][vW.get_y()].is_empty()){
 			// Going up and down rows is is moving parallel to the y axis
-			get_v()[vW.get_y()][vW.get_x()].get_event()->make_sound();
+			get_v()[vW.get_x()][vW.get_y()].get_event()->make_sound();
 		}
 	}else{
 		// This is when the point inserted is not in the 2d array.

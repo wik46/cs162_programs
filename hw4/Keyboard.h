@@ -44,6 +44,10 @@ public:
 	void print_all_info();
 
 	// =====================
+	// Getters and Setters.
+	// =====================
+	Vec2d& get_player_pos(){return m_player_pos;}
+	// =====================
 	// Overloaded operators.
 	// =====================
 	// ==============

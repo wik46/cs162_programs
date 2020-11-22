@@ -22,7 +22,9 @@
 #include "Gold.h"
 #include "Pit.h"
 #include "Wumpus.h"
+#include "Player.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iomanip>
 #include <iostream>
@@ -46,6 +48,11 @@ public:
 	
 	// 2. Empty's all the Rooms from the Event. If empty = false, then no cleaning occurs.
 	void empty_rooms(bool empty = true);
+	// 3. This function will be used after init() to shuffle the rooms randomly.
+	void random_shuffle();
+	// 4. This function must be used after the random_shuffle to insert the player into 
+	// 	the grid. It sets the player's init and current pos.
+	void insert_player(Event* );
 	// =================
 	// Display:
 	// =================
@@ -64,6 +71,7 @@ public:
 	// Rest of the Big Three.
 	Grid(const Grid&) = delete;
 	Grid& operator=(const Grid&) = delete;
+
 
 };
 

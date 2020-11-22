@@ -9,12 +9,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "Vec2d.h" // Mathematical vector not the std::vector.
+#include "Event.h"
 
 #include <cassert> 
 #include <unistd.h>
 #include <iostream>
 
-class Player{
+class Player: public Event{
 	// The player's name.
 	std::string m_name;
 	// This is used to determine if the game has ended with a win or a los.
@@ -49,9 +50,9 @@ public:
 	// 2. True -> player has picked up the gold	
 	bool get_has_gold();
 	// 3. Initial position.
-	Vec2d get_init_pos();
+	Vec2d& get_init_pos() override;
 	// 4. Current position.
-	Vec2d& get_current_pos();
+	Vec2d& get_current_pos()override;
 	// 5. Returns the number of arrows.
 	// 	Will return 0 if no arrows left.
 	unsigned int get_num_arrows(); 
@@ -67,7 +68,7 @@ public:
 	// ========================
 	// This will create a player with the default of three arrows.
 	// 1. Initial position, current position, number of arrows.
-	Player(const Vec2d&, const Vec2d&, unsigned int total = 3);
+	Player(const Vec2d&, const Vec2d&, bool debug_mode = true ,unsigned int total = 3);
 private:
 	// This function will be used inside the constructor to ask the user for 
 	// there name and print out a nice message. 

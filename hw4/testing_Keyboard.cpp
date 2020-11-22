@@ -68,7 +68,7 @@ int main(){
 	Vec2d init(0,0), current(0,0);
 	unsigned int grid_size = 10;
 	// This is how to intitalize a player.
-	Player p(init, current, 3);
+	Player p(init, current);
 	// =============================
 	// Creating the Keyboard class.
 	// =============================

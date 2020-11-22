@@ -59,6 +59,7 @@ void Event::display() const{
 void Event::make_sound() const{
 	// If this is true then is means that the instance was created to be printed 
 	// to the screen in debug_mode.
+	std::cout << "Problem " << std::endl;
 	std::cout << m_sound << std::endl;
 	return;
 }
@@ -129,3 +130,16 @@ Event::Event(char symbol, const char* sound, bool debug_mode)
 // 1. Destructor.
 /* ***************************************************************************************
  * ***************************************************************************************/
+
+
+// THESE FUNCTION IS ONLY SO THAT I CAN USE THEM WITH PLAYER.
+Vec2d& Event::get_init_pos(){
+	std::cout << "THIS get_init inside Event class should never be called."<< std::endl;
+	Vec2d* v= new Vec2d(0,0);
+	return *v;
+}
+Vec2d& Event::get_current_pos(){
+	std::cout << "THIS get_current inside Event class should never be called."<< std::endl;
+	Vec2d* v = new Vec2d(0,0);
+	return *v;
+}

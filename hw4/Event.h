@@ -11,6 +11,8 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "Vec2d.h"
+
 #include <iostream>
 class Event{
 	// Member variables.
@@ -58,6 +60,10 @@ public:
 	// ==============
 	// 1. Destructor.
 	virtual ~Event() = default;
+
+	// Virual functions used by player.
+	virtual Vec2d& get_init_pos();
+	virtual Vec2d& get_current_pos();
 };
 
 #endif 
