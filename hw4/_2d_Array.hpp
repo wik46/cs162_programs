@@ -79,7 +79,7 @@ public:
 	bool is_inside(const Vec2d&);
 	// 2. This function will be used to perform an action on all the block N/E/S/W
 	// 	from the head of the vector passed to the function.
-	void search_around(const Vec2d&);
+	//virtual void search_around(const Vec2d&);
 	// =====================
 	// Displaying the array.
 	// =====================
@@ -151,6 +151,7 @@ bool _2d_Array<T>::is_inside(const Vec2d& v){
 	}
 }
 
+
 /* **************************************************************************************
  * Function name: search_around()
  * Description: This function will accept a head of a vector and search around the 
@@ -164,6 +165,7 @@ bool _2d_Array<T>::is_inside(const Vec2d& v){
  * Post-conditions: Searches around the point given. Note that here it only prints the
  * 		    point. It can be used to do other tasks.
  * **************************************************************************************/
+/*
 template <typename T>
 void _2d_Array<T>::search_around(const Vec2d& v){
 	// If the point inserted is not in the 2d_array then the function will inform the 
@@ -204,6 +206,7 @@ void _2d_Array<T>::search_around(const Vec2d& v){
 	}
 	return;
 }
+*/
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Display:
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

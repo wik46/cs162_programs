@@ -19,13 +19,13 @@
 #include <cassert>
 #include <iostream>
 class Room{
-public:	// Member variables.
+	// Member variables.
 	// This will store a child of the Event class or be empty.
 	Event* m_event;
 public:	
 	Event* get_event(){return m_event;}
 	bool is_empty(){
-		if(!m_event){
+		if(m_event == NULL){
 			return true;
 		}else{
 			return false;
@@ -61,7 +61,7 @@ public:
 	// Constructors.
 	// ==============
 	// The default consrtuctor.
-	Room(Event* = NULL);
+	Room(Event* e = NULL);
 	// ==============
 	// The big three.
 	// ==============

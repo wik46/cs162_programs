@@ -134,9 +134,9 @@ std::ostream& operator<<(std::ostream& stream_out, const Room& room){
  * Post-conditions: Create an objects a the Room class.
  * **************************************************************************************/
 // The default consrtuctor.
-Room::Room(Event* e): m_event(e)
+Room::Room(Event* e): m_event{e}
 {
-	std::cout << "Room constructor. "<< std::endl;
+//	std::cout << "Room constructor. "<< std::endl;
 }
 // ==============
 // The big three.
@@ -173,4 +173,3 @@ Room::~Room(){
 //bool IsGold(const Room& r){
 //	return( r.get_event()->get_symbol() == 'g');
 //}
-

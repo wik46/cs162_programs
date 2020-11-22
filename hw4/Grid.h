@@ -16,6 +16,12 @@
 #include "Room.h"
 #include "Vec2d.h"
 
+// The parent on top followed by all its children.
+#include "Event.h"
+#include "Bat.h"
+#include "Gold.h"
+#include "Pit.h"
+#include "Wumpus.h"
 
 #include <cassert>
 #include <iomanip>
@@ -27,6 +33,23 @@
 class Grid: public _2d_Array<Room> // Room is a custom data type that has the Event* member
 {
 public:
+	// ==================
+	// Working functions:
+	// ==================
+	// 1. Inserts events into the room. Only use if you know all rooms are empty.
+	// ** This is meant to be used just after empty_rooms() inside the Start_game() 
+	// function.
+	//
+	// ** This function decides of the game is going to be in 
+	// 	debug mode or in normal mode.
+	void init(bool debug_mode = true); // Only true for development purposes.
+	
+	// 2. Empty's all the Rooms from the Event. If empty = false, then no cleaning occurs.
+	void empty_rooms(bool empty = true);
+	// =================
+	// Display:
+	// =================
+	void search_around(const Vec2d&);
 	// =================
 	// Constructor:
 	// =================

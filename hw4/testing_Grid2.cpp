@@ -114,13 +114,14 @@ int main(){
 	// NB! Never try to insert an event in the grid without the insert function.
 	std::cout << "===="<< std::endl;
 	
-	grid.get_v()[0][0].insert(e29);
-//	grid.get_v()[0][0].display();
-	std::cout << std::endl;
-	//grid.get_v()[0][1].display();
-	// This is how to remove an event from a room.
-	//Room room_cleaner2(grid.get_v()[0][0].remove());	
 
+	grid.get_v()[0][0].insert(e29);
+	grid.get_v()[0][0].display();
+	std::cout << std::endl;
+	grid.get_v()[0][1].display();
+	// This is how to remove an event from a room.
+	Room room_cleaner2(grid.get_v()[0][0].remove());	
+	
 	// 1. INSERTING EVENTS:
 	// ===================
 	// grid.dim() returns m_array.size()
@@ -130,7 +131,10 @@ int main(){
 	// These will search for the events in the grid.
 	// Because the grid is initially empty, it will not find anything.
 	// 
+	
 
+	grid.empty_rooms();
+	grid.init(true);
 // You need a way to find a wumpus or gold. If it is not in the array, then you insert it.
 // 	If the user selected a old game just insert the missing events.
 // 	If the user selected a new game, just shuffle the grid after inserting the events.
@@ -144,53 +148,16 @@ int main(){
 //	}else{
 
 	//}
-	
-
-// This will remove any event that is stored in the place where a new one will be inserted.
-	bool debug_mode = true;
-	for(int i = 0; i < grid.get_dim(); i++){
-		for(int j = 0; j < grid.get_dim(); j++){			
-			// This part inserts the 2 Bats events and the 2 Pit events.
-			// ==========================================================
-			//std::cout << i << ' ' << j << std::endl;
-			if((j % 2 == 0) && (i == 0) && (j < 4)){
-				// ===== This will delete the event from the room if it does have an Event*
-				if(!grid.get_v()[i][j].is_empty()){
-					delete grid.get_v()[i][j].remove();
-				}
-				// ====
-				grid.get_v()[i][j].insert(new Bat(debug_mode));
-			}else if(i == 0 && j < 4){
-				// ===== This will delete the event from the room if it does have an Event*
-				if(!grid.get_v()[i][j].is_empty()){
-					delete grid.get_v()[i][j].remove();
-				}
-				// ====
-				grid.get_v()[i][j].insert(new Pit(debug_mode));
-			}
-			// 2. Inserting the Wumpus and the Gold
-			// ==========================================================
-			if( i == 1 && j == 0){
-				// ===== This will delete the event from the room if it does have an Event*
-				if(!grid.get_v()[i][j].is_empty()){
-					delete grid.get_v()[i][j].remove();
-				}
-				// ====
-				grid.get_v()[i][j].insert(new Gold(debug_mode));
-			}else if(i == 1 && j == 1){
-				// ===== This will delete the event from the room if it does have an Event*
-				if(!grid.get_v()[i][j].is_empty()){
-					delete grid.get_v()[i][j].remove();
-				}
-				// ====
-				grid.get_v()[i][j].insert(new Wumpus(debug_mode));
-			}
-		}
-	}	
-	
 	// Outputting the grid.
 	grid.print_with_grid();	
-
+	std::cout << std::endl;
+	grid.empty_rooms();
+	grid.print_with_grid();	
+	std::cout << std::endl;
+	grid.init(true);
+	grid.print_with_grid();	
+	std::cout << std::endl;
+		
 	// 2. SHUFFLEING GRID:
 	// ===================
 
@@ -201,7 +168,15 @@ int main(){
 	// Steps 1: Overload == and != so that the condition
 	// Steps 2: Create a function to pass alongside the std::find() that determines
 	// 		equality based on the symbol of the event, not all the members of the event.
+	
+	// 3. Next door(). 
+	// ====================
+	// ** You need to define search_around such that it prints out the sound and not the symbol.
+	// ** In progress.
+	Vec2d v1(1,1);
+	grid.search_around(v1);
 	std::cout << std::endl;
+	std::cout << "Last" << std::endl;
 	
 	return 0;
 }
