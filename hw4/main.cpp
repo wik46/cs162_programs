@@ -100,6 +100,12 @@ int main(int argc, char** argv){
 				std::cout << "get(): " << g.get_keyboard().get( g.get_player() ) << std::endl;
 				Vec2d dir = g.get_keyboard().dir(); // NB!! dir() should only run once per round.
 				std::cout << "dir(): "<< dir << std::endl;	
+				// This will save the player's previous position in the keyboard.
+				// It is used by the Evalaute_round to remove the player from the
+				// previous room to the new one.
+				if( !(g.get_keyboard().get_input() == Vec2d(0,0)) ){
+					g.get_keyboard().get_prev_pos() = g.get_player().get_current_pos();
+				}
 				// This will move the player to the space that he/she needs to be. 
 				g.get_player().move(dir);	
 				// Seeing all the members of the classes.
@@ -125,8 +131,15 @@ int main(int argc, char** argv){
 				if( g.get_grid().get_v()[i][j].is_empty() ){
 					// Step 1: Remove the player from his/previous room.
 					// Calculating the previous loaction.
-				//	Vec2d prev_loc = 
-				//	g.get_grid().get
+					int prev_i = g.get_keyboard().get_prev_pos().get_x();
+					int prev_j = g.get_keyboard().get_prev_pos().get_y();
+					// Step 2: Removing the player from the previous room.
+					// The player is not dynamic memory therefore .remove()
+					// is no accompanyied with delete.
+					g.get_grid().get_v()[prev_i][prev_j].remove();
+					// Step 3: Inserting the player into the new empty room.
+					g.get_grid().get_v()[i][j].insert( &g.get_player() );
+					
 					std::cout << "EMPPPTYYYY"<< std::endl;
 
 				}else{

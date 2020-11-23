@@ -215,12 +215,13 @@ void Keyboard::print_all_info(){
 	std::cout << "-------------------------------------------------------"<< std::endl;
 	std::cout << "1.) User input as vector [m_input]: " << m_input << std::endl;
 	std::cout << "2.) User position as vector [m_player_pos]: " << m_player_pos << std::endl;
-	std::cout << "3.) The direction of the shot fired[m_shot_dir]: " << m_shot_dir << std::endl;
-	std::cout << "4.) The size of the grid [m_grid_size]: " << m_grid_size << std::endl;
-	std::cout << "5.) North [N]: " << N << std::endl;
-	std::cout << "6.) East  [E]: " << E << std::endl;
-	std::cout << "7.) South [S]: " << S << std::endl;
-	std::cout << "8.) West  [W]: " << W << std::endl;
+	std::cout << "3.) User previous position as vector [m_prev_pos]: " << m_prev_pos << std::endl;
+	std::cout << "4.) The direction of the shot fired[m_shot_dir]: " << m_shot_dir << std::endl;
+	std::cout << "5.) The size of the grid [m_grid_size]: " << m_grid_size << std::endl;
+	std::cout << "6.) North [N]: " << N << std::endl;
+	std::cout << "7.) East  [E]: " << E << std::endl;
+	std::cout << "8.) South [S]: " << S << std::endl;
+	std::cout << "9.) West  [W]: " << W << std::endl;
 	std::cout << "-------------------------------------------------------"<< std::endl;
 	return;
 }
@@ -249,7 +250,7 @@ void Keyboard::print_all_info(){
  * ***************************************************************************************/
 // The default consrtuctor.
 Keyboard::Keyboard(const Vec2d& init, unsigned int size)
-:m_grid_size{size}, m_input(0,0), m_player_pos{init}, m_shot_dir(0,0)
+:m_grid_size{size}, m_input(0,0), m_player_pos{init}, m_shot_dir(0,0), m_prev_pos(0,0)
 , N(-1,0), E(0,1), S(1,0), W(0,-1)
 {}
 // =======================================================================================

@@ -136,6 +136,7 @@ Game::Game(int size, bool debug_mode): m_game_state{"not_started"}
 	m_player.get_init_pos() = init_pos;
 	m_player.get_current_pos() = init_pos;
 	m_keyboard.get_player_pos() = init_pos;
+	m_keyboard.get_prev_pos() = init_pos;
 }
 /* **************************************************************************************
  * **************************************************************************************/
