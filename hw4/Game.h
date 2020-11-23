@@ -48,7 +48,7 @@ class Game{
 	// 	to move after input.
 	Keyboard m_keyboard;
 public:	// 4. 
-	std::string m_game_state;
+	static std::string m_game_state;
 public:
 	Game(int size = 4, bool debug = true);
 	// The destrutcor.
@@ -79,7 +79,7 @@ public:
 // Non-member functions.
 // =====================
 void press_enter();		
-
+bool validate_input(int&, char**);
 #endif
 
 

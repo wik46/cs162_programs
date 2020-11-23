@@ -357,6 +357,19 @@ void Player::action(Player& p, Keyboard& k, Grid& grid){
 				}
 			}
 		}
+		// Inserting the wumpus into the grid.
+		if(grid.find_pos('w') == Vec2d(-1,-1)){
+			for(int i = 0; i < grid.get_v().size(); i++){
+				for(int j = 0; j < grid.get_v().size(); j++){
+					if(grid.get_v()[i][j].is_empty()){
+						grid.get_v()[i][j].insert(new Wumpus(p.get_debug_mode()));
+						// So that the loop stops.
+						j = grid.get_v().size() + 10;
+						i = j;
+					}
+				}
+			}
+		}
 		// Resetting previous position of the player.
 		throw "Congratulations!!! You find the gold $$$ without being eaten by the WUMPUS.";
 	}

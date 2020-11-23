@@ -57,6 +57,7 @@ public:
 	Vec2d& get_player_pos();
 	Vec2d& get_prev_pos();
 	const Vec2d& get_input();
+	Vec2d& get_shot_dir(){return m_shot_dir;}
 	// =====================
 	// Overloaded operators.
 	// =====================

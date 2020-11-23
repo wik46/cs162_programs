@@ -431,7 +431,7 @@ _2d_Array<T>::_2d_Array(T var, int n)
 template <typename T>
 _2d_Array<T>::~_2d_Array(){
 	// Temporary.
-	std::cout << "_2d_Array is destructed" << std::endl;
+	//std::cout << "_2d_Array is destructed" << std::endl;
 }
 
 #endif

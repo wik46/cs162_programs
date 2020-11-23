@@ -319,4 +319,29 @@ Vec2d Grid::find_pos(char symbol){
 		return Vec2d(-1,-1);
 	}
 }
+/* ***************************************************************************************
+ * Function name: is_boundry()
+ * Description: This function returns true if the vector is on the boundry.
+ * ***************************************************************************************/
+bool Grid::is_boundry(Vec2d v,Vec2d dir){
+	if(dir == Vec2d(-1,0)){
+		if(v.get_x() == 0){
+			return true;
+		}
+	}else if(dir == Vec2d(1,0)){
+		if(v.get_x() == get_v().size() - 1){
+			return true;
+		}
+	}else if(dir == Vec2d(0,1)){
+		if(v.get_y() == get_v().size() - 1){
+			return true;
+		}
+	}else if(dir == Vec2d(0,-1)){
+		if(v.get_y() == 0){
+			return true;
+		}
+	}
+	return false;
+}
+
 

@@ -34,6 +34,8 @@
 #include <cstdlib>
 #include <ctime>
 
+// Is this static so that I can use it before an instance of the GAME class was created.
+std::string Game::m_game_state{"not_started"};
 void press_enter();		
 /* **************************************************************************************
  * Function name: get_player()
@@ -115,10 +117,11 @@ void Game::print_game_rules(){
  * Pre-conditions: There will be only one instance of a game class in the program. 
  * Post-condtions: An instance of a Game classes is constructed.
  * **************************************************************************************/
-Game::Game(int size, bool debug_mode): m_game_state{"not_started"}
- ,m_player(Vec2d(0,0), Vec2d(0,0), debug_mode,3)
+Game::Game(int size, bool debug_mode):m_player(Vec2d(0,0), Vec2d(0,0), debug_mode,3)
  , m_grid(size), m_keyboard(Vec2d(0,0), size)
 {
+	// Seeding the  random number generator.
+	srand(time(NULL));
 	// This inserts all the Events* into the Grid.
 	m_grid.init( debug_mode );	
 	// You still need to shuffle the grid.
@@ -237,4 +240,29 @@ void press_enter(){
 }
 
 	
-
+/* **************************************************************************************
+ * Function name: validate_input()
+ * Description: The function accepts and intger and a const char* and a bool.
+ * 		If the integer < 4, program ends. If const char* var = "true" || "True",
+ * 		the program is initialized in debug mode.
+ * *************************************************************************************/
+bool validate_input(int& argc, char** argv){
+	// If the invalid number of commandline arguments were intered.
+	const int min_size = 4;
+	if(argc < 3){
+		throw "You should specify two parameters as initial input.";
+	}
+	// If the convertion from string to int was unsuccessful it throws an exception.
+	std::string tmp = argv[1];
+	argc =  stoi(tmp);	
+	// If the board is on invalid size.
+	if(argc < 4 || argc > 12){
+		throw "Invalid board size [4 - 12]";
+	}
+	// This will return the debug mode.
+	if(argv[2][0] == 't' || argv[2][0] == 'T'){
+		return true;
+	}else{
+		return false;
+	}
+}

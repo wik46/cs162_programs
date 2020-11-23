@@ -55,6 +55,7 @@ public:
 	void insert_player(Event* );
 	// 5. Returns the position of the symbol as a vector.
 	Vec2d find_pos(char);
+	bool is_boundry(Vec2d ,Vec2d);
 	// =================
 	// Display:
 	// =================
