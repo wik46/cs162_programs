@@ -97,7 +97,11 @@ const Vec2d& Player::move(const Vec2d& dir){
  * **************************************************************************************/
 // 2. This function will decrement the player's number of arrows and return
 // 	the direction of the shot made. The Keyboard class will validate the input.
-const Vec2d& shoot(const Vec2d& dir);
+void Player::make_shot(){
+	assert(m_num_arrows > 0 && "[shoot()] Player member error");
+	m_num_arrows--;
+	return;
+}
 /* **************************************************************************************
  * Function name: pick_up_gold().
  * Description: This function will be used when the Player enter the Room where there
@@ -206,7 +210,8 @@ void Player::print_all_info(){
 	std::cout << "2.) Has gold [m_has_gold]: " << m_has_gold << std::endl;
 	std::cout << "3.) Initial position [m_init_pos]: " << m_init_pos << std::endl;
 	std::cout << "4.) Current position [m_current_pos]: " << m_current_pos << std::endl;
-	std::cout << "5.) Number of arrows [m_num_arrows]: " << m_num_arrows<< std::endl;
+	std::cout << "5.) Shot direction [m_shot_dir]: " << m_shot_dir << std::endl;
+	std::cout << "6.) Number of arrows [m_num_arrows]: " << m_num_arrows<< std::endl;
 	std::cout << "-------------------------------------------------------"<< std::endl;
 	return;
 }
@@ -260,7 +265,7 @@ void Player::set_info(){
  * **************************************************************************************/
 Player::Player(const Vec2d& init, const Vec2d& current, bool debug_mode, unsigned int total)
 :Event('$', " ", debug_mode)
-, m_has_gold{false}, m_init_pos{init}, m_current_pos{current}, m_num_arrows{total}
+, m_has_gold{false}, m_init_pos{init}, m_current_pos{current}, m_shot_dir{0,0},m_num_arrows{total}
 {
 	set_info();
 }

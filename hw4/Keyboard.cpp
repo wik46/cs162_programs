@@ -53,14 +53,24 @@
  * Pre-condtions: -
  * Post-conditions: Validates the user input and returns it i.t.o. a vector.
  * ***************************************************************************************/
-const Vec2d& Keyboard::get(){
+const Vec2d& Keyboard::get(Player& p){
+	std::cout << "** Add a space before the direction if you want to fire an arrows."
+	<< std::endl;
 	prompt_move();
 	std::string input = "A";
 	std::getline(std::cin,input);
 	// If the player wants to make a shot.
-	if(input[0] == ' '){
+	// =====================================================================================
+	if(input == " w" || input == " d" || input == " s" || input == " a"){
 		std::cout << "[temporary]: User wants to fire an arrow." << std::endl;
-
+		try{
+			// See documentation below, this is a bigger function.
+			shoot(p,input);
+		//	throw "You are out of arrows";
+		}catch(const char* a){
+			std::cout << a << std::endl;
+			return get(p);
+		}	
 	// N,E,S,W is const Vec2d instances defined as private member of the class.
 	// Move north.
 	}else if(input == "w"){	
@@ -81,7 +91,7 @@ const Vec2d& Keyboard::get(){
 		<< std::endl;
 		std::cout << std::setfill('-') << std::setw(20) << ' ' << std::endl;
 		// This will reprompt the user to enter another move.
-		get();
+		get(p);
 	}
 	return m_input;
 	
@@ -92,12 +102,16 @@ const Vec2d& Keyboard::get(){
  * 		the current direction that the player wants to move in. It will return
  * 		the vector that should be passed in the player.move() function to
  * 		update the player's position. It will also update the player's position.
+ * Note*** : It will also set the m_shot_dir = <0,0> becuase this means no shot was 
+ * 		fired.
  * Parameters: -
  * Pre-condtions: Assumes that get() update the player's current move.
  * Post-conditions: Returns the Vec2d needed for player.move().
  * ***************************************************************************************/
 const Vec2d& Keyboard::dir(){
-	// If the position of the player is on the boundry of the grid.
+	// Part 1: Set the m_shot_dir to indicate that no shot was fired.
+	//m_shot_dir = Vec2d(0,0);
+	// Part 2: If the position of the player is on the boundry of the grid.
 	if( is_boundry(m_player_pos) ){
 		std::cout << "[On boundry:]" << std::endl;
 		// Case 1: On the boundry.
@@ -138,9 +152,49 @@ void prompt_move(){
 }
 
 /* ***************************************************************************************
- * Function name: action()
+ * Function name: shoot()
+ * Description: This funcion will accecpt the user's direction of shoot. It will throw 
+ * 		a const char* exception when the user's arrows are finished. It will 
+ * 		accept a reference to a player so that it can remove there arrows. 
+ * Parameters: Player&
+ * Pre-conditions: Assumes that the string input is " w", " d", " s", or " a".
+ * Post-conditions: Sets the m_input = <0,0> and it sets the direction of
+ * 			m_shot_dir. 
  * ***************************************************************************************/
-
+void Keyboard::shoot(Player& p, const std::string& input){
+	// Case 1: This throws an exception if the user does not have arrows
+	// 		left to fire.
+	if(p.get_num_arrows() < 1){
+		throw "You are out of arrows and can't make a shot.";
+	}else{
+		// So that the player does not move his/her position.
+		m_input = Vec2d(0,0);
+		// N,E,S,W is const Vec2d instances defined as private member of the class.
+		// Move north.
+		if(input == " w"){	
+			this->m_shot_dir = N;
+			p.get_shot_dir() = N;
+		// Move east.
+		}else if(input == " d"){
+			this->m_shot_dir = E;
+			p.get_shot_dir() = E;
+		// Move south.
+		}else if(input == " s"){
+			this->m_shot_dir = S;
+			p.get_shot_dir() = S;
+		// Move west.
+		}else if(input == " a"){
+			this->m_shot_dir = W;
+			p.get_shot_dir() = W;
+		}else{
+			std::cout << "Invalid direction fired please enter the directions specified."
+			<< std::endl; 
+		}
+		// a. This will decrement the number of arrows the player has.
+		p.make_shot();
+	}
+	return;
+}
 /* ***************************************************************************************
  * ***************************************************************************************/
 
@@ -161,11 +215,12 @@ void Keyboard::print_all_info(){
 	std::cout << "-------------------------------------------------------"<< std::endl;
 	std::cout << "1.) User input as vector [m_input]: " << m_input << std::endl;
 	std::cout << "2.) User position as vector [m_player_pos]: " << m_player_pos << std::endl;
-	std::cout << "3.) The size of the grid [m_grid_size]: " << m_grid_size << std::endl;
-	std::cout << "4.) North [N]: " << N << std::endl;
-	std::cout << "5.) East  [E]: " << E << std::endl;
-	std::cout << "6.) South [S]: " << S << std::endl;
-	std::cout << "7.) West  [W]: " << W << std::endl;
+	std::cout << "3.) The direction of the shot fired[m_shot_dir]: " << m_shot_dir << std::endl;
+	std::cout << "4.) The size of the grid [m_grid_size]: " << m_grid_size << std::endl;
+	std::cout << "5.) North [N]: " << N << std::endl;
+	std::cout << "6.) East  [E]: " << E << std::endl;
+	std::cout << "7.) South [S]: " << S << std::endl;
+	std::cout << "8.) West  [W]: " << W << std::endl;
 	std::cout << "-------------------------------------------------------"<< std::endl;
 	return;
 }
@@ -194,7 +249,8 @@ void Keyboard::print_all_info(){
  * ***************************************************************************************/
 // The default consrtuctor.
 Keyboard::Keyboard(const Vec2d& init, unsigned int size)
-:m_grid_size{size}, m_input(0,0), m_player_pos{init}, N(-1,0), E(0,1), S(1,0), W(0,-1)
+:m_grid_size{size}, m_input(0,0), m_player_pos{init}, m_shot_dir(0,0)
+, N(-1,0), E(0,1), S(1,0), W(0,-1)
 {}
 // =======================================================================================
 // The big three.

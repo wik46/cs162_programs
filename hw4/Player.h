@@ -27,6 +27,8 @@ class Player: public Event{
 	Vec2d m_init_pos;
 	// Current position.
 	Vec2d m_current_pos;
+	// The direction of the shot fired by the user.
+	Vec2d m_shot_dir;
 	// The player's number of arrows.
 	unsigned int m_num_arrows;
 public:
@@ -35,6 +37,8 @@ public:
 	// ========================
 	// 1. This will move the player to the position given as a vector.
 	const Vec2d& move(const Vec2d&);
+	// 2. This will decrement the number of arrows of the player.
+	void make_shot();
 	// 3. This will set the m_has_gold to true.
 	void pick_up_gold();
 	// 4. This will be used inside the reset() function in the Game class
@@ -50,10 +54,13 @@ public:
 	// 2. True -> player has picked up the gold	
 	bool get_has_gold();
 	// 3. Initial position.
-	Vec2d& get_init_pos() override;
+	Vec2d& get_init_pos()override;
 	// 4. Current position.
 	Vec2d& get_current_pos()override;
-	// 5. Returns the number of arrows.
+	// 5. Returns the shot direction of the player.
+	Vec2d& get_shot_dir(){return m_shot_dir;}
+	
+	// 6. Returns the number of arrows.
 	// 	Will return 0 if no arrows left.
 	unsigned int get_num_arrows(); 
 	

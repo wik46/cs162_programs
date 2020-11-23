@@ -23,9 +23,11 @@ class Keyboard{
 	// 2. This will be the new position on the board to which the Player will move.
 	// The keyboard must be created with the player's initial position.
 	Vec2d m_player_pos;
-	// 3. This member will know what is the size of the grid.
+	// 3. This vector represents the shot made by the user.
+	Vec2d m_shot_dir;
+	// 4. This member will know what is the size of the grid.
 	unsigned int m_grid_size;
-	// 4. These vectors will be added to the Player's position to calculate the new
+	// 5. These vectors will be added to the Player's position to calculate the new
 	//    position towards where the Player should move.
 	const Vec2d N,E,S,W;
 
@@ -36,8 +38,10 @@ public:
 	// ========================
 	// Hard Working functions.	
 	// ========================
-	const Vec2d& get();
+	const Vec2d& get(Player&);
 	const Vec2d& dir();
+	void shoot(Player& p, const std::string&);
+	
 	// ========================
 	// Development helpers.	
 	// ========================
@@ -47,6 +51,7 @@ public:
 	// Getters and Setters.
 	// =====================
 	Vec2d& get_player_pos(){return m_player_pos;}
+	const Vec2d& get_input(){return m_input;}
 	// =====================
 	// Overloaded operators.
 	// =====================
