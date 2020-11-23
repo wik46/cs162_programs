@@ -53,6 +53,8 @@ public:
 	// 4. This function must be used after the random_shuffle to insert the player into 
 	// 	the grid. It sets the player's init and current pos.
 	void insert_player(Event* );
+	// 5. Returns the position of the symbol as a vector.
+	Vec2d find_pos(char);
 	// =================
 	// Display:
 	// =================

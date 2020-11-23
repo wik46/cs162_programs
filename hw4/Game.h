@@ -61,12 +61,13 @@ public:
 	// 3.
 	Keyboard& get_keyboard(); 
 	// 4.
-	const std::string& get_game_state();
+	std::string& get_game_state();
 
 	// This function is used inside Start_game().
 	void Start_game();
 	void print_game_rules();	
 	void print_round(int round) const;
+	void Evaluate_round();
 	// This function will be used to implement all the needed work
 	// for the end of a round
 //	void Play_next_round();

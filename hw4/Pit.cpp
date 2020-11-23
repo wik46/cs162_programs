@@ -28,6 +28,9 @@
 
 #include "Event.h"
 #include "Pit.h"
+#include "Grid.h"
+//#include "Player.h"
+//#include "Keyboard.h"
 #include <iostream>
 
 // =======================================================================================
@@ -75,6 +78,35 @@
  * 		   it differently.
  * Post-conditions: -
  * ***************************************************************************************/
+void Pit::action(Player& p, Keyboard& k, Grid& grid){
+	std::cout << "I am the pit actions" << std::endl;
+	// Resetting the arrows.
+	if(p.get_num_arrows() < 3){
+		p.get_num_arrows() = 3;	
+	}
+	// Resetting the gold.
+	p.reset_gold();
+	// Inserting gold into the grid.
+	if(grid.find_pos('g') == Vec2d(-1,-1)){
+		for(int i = 0; i < grid.get_v().size(); i++){
+			for(int j = 0; j < grid.get_v().size(); j++){
+				if(grid.get_v()[i][j].is_empty()){
+					grid.get_v()[i][j].insert(new Gold(p.get_debug_mode()));
+					// So that the loop stops.
+					j = grid.get_v().size() + 10;
+					i = j;
+				}
+			}
+		}
+	}
+	// Resetting previous position of the player.
+	p.get_current_pos() = k.get_prev_pos();
+	// Resetting previous position of the player.
+	p.get_current_pos() = k.get_prev_pos();
+	k.get_player_pos() = p.get_current_pos();
+	throw "You fall down the pit";
+	return; 
+}
 
 /* ***************************************************************************************
  * ***************************************************************************************/

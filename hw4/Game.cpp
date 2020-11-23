@@ -73,7 +73,7 @@ Grid& Game::get_grid(){
  * Pre-conditions: -
  * Post-conditions: Returns m_game_state. 
  * **************************************************************************************/
-const std::string& Game::get_game_state(){
+std::string& Game::get_game_state(){
 	return m_game_state;
 }
 
@@ -139,6 +139,25 @@ Game::Game(int size, bool debug_mode): m_game_state{"not_started"}
 	m_keyboard.get_prev_pos() = init_pos;
 }
 /* **************************************************************************************
+ * Function name: Evaluate_round()
+ * **************************************************************************************/
+void Game::Evaluate_round(){
+	// If the gamestate is finished then the user lost.
+	if(m_game_state != "finished"){
+		try{
+			m_player.action( m_player, m_keyboard, m_grid);
+		}catch(const char* msg){
+			std::cout << std::endl << msg << std::endl << std::endl; 
+			get_game_state() = "finished";
+		}catch(...){
+			std::cout << "***caught last block***" << std::endl;
+			get_game_state() = "finished";	
+		}
+	}
+	return;
+}
+
+/* **************************************************************************************
  * **************************************************************************************/
 
 /// THIS FUNCTION RETURNS TH POS OF A SYMBOL.
@@ -149,7 +168,6 @@ Vec2d Game::find_pos(char symbol){
 	
 	int i = 0, j = 0;
 	for(i = 0; i < m_grid.get_v().size(); i++){
-		std::cout << "---"<< i << " " << j << std::endl;
 		for(j = 0; j < m_grid.get_v().size(); j++){
 			if(!m_grid.get_v()[i][j].is_empty()){
 				if(m_grid.get_v()[i][j].get_event()->get_symbol() == symbol){
@@ -165,7 +183,6 @@ Vec2d Game::find_pos(char symbol){
 		}
 		
 	}
-	std::cout << i << " " << j << std::endl;
 	return Vec2d(i,j);
 }
 

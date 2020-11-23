@@ -25,6 +25,9 @@
  * ***************************************************************************************/
 
 #include "Event.h"
+//#include "Player.h"
+//#include "Keyboard.h"
+
 #include <iostream>
 
 // =======================================================================================
@@ -59,7 +62,7 @@ void Event::display() const{
 void Event::make_sound() const{
 	// If this is true then is means that the instance was created to be printed 
 	// to the screen in debug_mode.
-	std::cout << "Problem " << std::endl;
+//	std::cout << "Problem " << std::endl;
 	std::cout << m_sound << std::endl;
 	return;
 }
@@ -82,6 +85,15 @@ void Event::make_sound() const{
 
 /* ***************************************************************************************
  * ***************************************************************************************/
+/* ***************************************************************************************
+ * Function name: get_debug_mode().
+ * Description: This function will be used to return the number of arrows left for the
+ * 		user to use. It will return 0 if the user does not have any arrows left.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: Return the name of the player's number of arrows.
+ * **************************************************************************************/
+
 
 // =======================================================================================
 // Overloaded operators.

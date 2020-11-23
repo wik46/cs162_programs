@@ -34,7 +34,8 @@
 
 int main(int argc, char** argv){
 	std::cout << "Program summary:" << std::endl;
-	std::cout << "1. Find a way to make the user take a shot or move:" << std::endl;
+	std::cout << "1. Find a way to make the user take a shot:" << std::endl;
+	std::cout << "2. Make sure that the debug mode an normal mode works." << std::endl;
 	std::cout << "4. Find a way to make the game prompt user old board, new board, or exit.:" << std::endl;
 	
 	
@@ -68,7 +69,7 @@ int main(int argc, char** argv){
 			g.get_player().print_all_info();
 			g.get_keyboard().print_all_info();
 			std::cout << "===================" << std::endl << std::endl;
-			std::cin.get();
+		//	std::cin.get();
 			//=========================================================================
 			
 			// ==============================================================
@@ -143,18 +144,34 @@ int main(int argc, char** argv){
 					std::cout << "EMPPPTYYYY"<< std::endl;
 
 				}else{
+					std::cout << "More than one loop will cause an error.";
 					std::cout << " NOTT  EMPPPTYYYY"<< std::endl;
+					try{
+						g.get_grid().get_v()[i][j].get_event()->action(g.get_player(), g.get_keyboard(), g.get_grid());
+						
+					}catch(const char* msg){
+						std::cout << std::endl << msg << std::endl << std::endl; 
+						g.get_game_state() = "finished";
+					}catch(...){
+						std::cout << "***caught last block***" << std::endl;
+						g.get_game_state() = "finished";
+					}
 				}	
 	
 			// Case 2: The player fired a shot. -- 
 			}else{
 				std::cout << "**** THE USER FIRED A SHOT. ****" << std::endl;
 			}	
-	
-			std::cin >> g.m_game_state;	
-		
-		}while(g.get_game_state() != "finished");
 			
+			// This evaluates if the user could have won.
+			g.Evaluate_round();
+			
+		}while(g.get_game_state() != "finished");
+			std::cout << std::endl << std::endl;
+			std::cout << "Type: 'new' to play with a new game board."<< std::endl;		
+			std::cout << "Type: 'old' to play with a same game board."<< std::endl;		
+			std::cout << "Type: 'terminated' to end the game."<< std::endl;		
+	
 			std::cin >> g.m_game_state;	
 	
 	}while(g.get_game_state() != "terminated");

@@ -15,6 +15,7 @@
 #include "Vec2d.h"
 
 
+
 #include <iostream>
 class Keyboard{
 	// Member variables.
@@ -41,8 +42,8 @@ public:
 	// ========================
 	// Hard Working functions.	
 	// ========================
-	const Vec2d& get(Player&);
-	const Vec2d& dir();
+	const Vec2d& get(Player& p);
+	const Vec2d/*&*/ dir();
 	void shoot(Player& p, const std::string&);
 	
 	// ========================
@@ -53,9 +54,9 @@ public:
 	// =====================
 	// Getters and Setters.
 	// =====================
-	Vec2d& get_player_pos(){return m_player_pos;}
-	Vec2d& get_prev_pos(){return m_prev_pos;}
-	const Vec2d& get_input(){return m_input;}
+	Vec2d& get_player_pos();
+	Vec2d& get_prev_pos();
+	const Vec2d& get_input();
 	// =====================
 	// Overloaded operators.
 	// =====================
@@ -77,7 +78,7 @@ public:
 	// 1. This returns true if the vector is on the boundry grid.
 	bool is_boundry(const Vec2d&);	
 	// 2. Calculates the direction that the player should move when on the boundry.
-	const Vec2d& calc_boundry_move(Vec2d&, const Vec2d&, int);
+	const Vec2d/*&*/ calc_boundry_move(Vec2d&, const Vec2d&, int);
 };
 
 

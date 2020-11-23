@@ -10,7 +10,9 @@
 #define PLAYER_H
 #include "Vec2d.h" // Mathematical vector not the std::vector.
 #include "Event.h"
-
+class Keyboard;
+//class Grid;
+#include "Grid.h"
 #include <cassert> 
 #include <unistd.h>
 #include <iostream>
@@ -30,7 +32,7 @@ class Player: public Event{
 	// The direction of the shot fired by the user.
 	Vec2d m_shot_dir;
 	// The player's number of arrows.
-	unsigned int m_num_arrows;
+	int m_num_arrows;
 public:
 	// ========================
 	// Player actions.
@@ -58,11 +60,12 @@ public:
 	// 4. Current position.
 	Vec2d& get_current_pos()override;
 	// 5. Returns the shot direction of the player.
-	Vec2d& get_shot_dir(){return m_shot_dir;}
-	
+	Vec2d& get_shot_dir();
 	// 6. Returns the number of arrows.
 	// 	Will return 0 if no arrows left.
-	unsigned int get_num_arrows(); 
+	int& get_num_arrows(); 
+	// This is a pure virtual function in Event.
+	void action(Player&, Keyboard&, Grid&)override;
 	
 	// ========================
 	// Development helpers.
@@ -75,7 +78,7 @@ public:
 	// ========================
 	// This will create a player with the default of three arrows.
 	// 1. Initial position, current position, number of arrows.
-	Player(const Vec2d&, const Vec2d&, bool debug_mode = true ,unsigned int total = 3);
+	Player(const Vec2d&, const Vec2d&, bool debug_mode = true ,int total = 3);
 private:
 	// This function will be used inside the constructor to ask the user for 
 	// there name and print out a nice message. 

@@ -18,12 +18,13 @@
 #include "Player.h"
 #include "Vec2d.h"
 #include "Event.h"
+//#include "Keyboard.h"
 #include <cassert> 
 #include <unistd.h>
 #include <iostream>
 #include <iomanip>
 #include <string>
-
+//class Grid;
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Actions the player can peform:
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,6 +140,9 @@ void Player::reset_gold(){
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // II) Getters and Setters: 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Vec2d& Player::get_shot_dir(){
+	return m_shot_dir;
+}
 
 /* ***************************************************************************************
  * Function name: get_name().
@@ -181,19 +185,16 @@ Vec2d& Player::get_init_pos() {
  * Pre-conditions: -
  * Post-conditions: Return the name of the player's number of arrows.
  * **************************************************************************************/
-unsigned int Player::get_num_arrows(){
-	if(this->m_num_arrows > 0){
+int& Player::get_num_arrows(){
+	//if(this->m_num_arrows > 0){
 		// Returns the number of arrows left.
 		return m_num_arrows;
-	}else{
+	//}else{
 		// This function will return false if the user does not have any
 		// arrows left.
-		return 0;
-	}
+//		return 0;
+	//}
 } 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Development helpers: 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /* ***************************************************************************************
  * Function name: print_all_info()
  * Description: This will print all the information of the player to the console with 
@@ -263,7 +264,7 @@ void Player::set_info(){
  * Post-conditions: The player instance is initialized with all its members variables
  * 			set to the correct values.
  * **************************************************************************************/
-Player::Player(const Vec2d& init, const Vec2d& current, bool debug_mode, unsigned int total)
+Player::Player(const Vec2d& init, const Vec2d& current, bool debug_mode, int total)
 :Event('$', " ", debug_mode)
 , m_has_gold{false}, m_init_pos{init}, m_current_pos{current}, m_shot_dir{0,0},m_num_arrows{total}
 {
@@ -326,3 +327,39 @@ int get_int(std::string prompt ,std::string error_msg){
 	}
 	return stoi(tmp);
 }
+
+/* **************************************************************************************
+ * Function name: action()
+ * Description: This function will determine if the player won the game or not.
+ * **************************************************************************************/
+
+
+void Player::action(Player& p, Keyboard& k, Grid& grid){
+	// This function will only execute if the player is on their initial position
+	// 	with the pot of gold.
+	if(m_current_pos == m_init_pos && m_has_gold){
+		// Resetting the arrows.
+		if(p.get_num_arrows() < 3){
+			p.get_num_arrows() = 3;	
+		}
+		// Resetting the gold.
+		p.reset_gold();
+		// Inserting gold into the grid.
+		if(grid.find_pos('g') == Vec2d(-1,-1)){
+			for(int i = 0; i < grid.get_v().size(); i++){
+				for(int j = 0; j < grid.get_v().size(); j++){
+					if(grid.get_v()[i][j].is_empty()){
+						grid.get_v()[i][j].insert(new Gold(p.get_debug_mode()));
+						// So that the loop stops.
+						j = grid.get_v().size() + 10;
+						i = j;
+					}
+				}
+			}
+		}
+		// Resetting previous position of the player.
+		throw "Congratulations!!! You find the gold $$$ without being eaten by the WUMPUS.";
+	}
+	return; 
+}
+

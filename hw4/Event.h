@@ -12,8 +12,13 @@
 #define EVENT_H
 
 #include "Vec2d.h"
+//#include "Keyboard.h"
 
 #include <iostream>
+class Player;
+class Keyboard;
+class Grid;
+
 class Event{
 	// Member variables.
 	// 1. The sound that the event makes when the player is in the adjacent room.
@@ -35,7 +40,7 @@ public:
 	// 2. This function will display the sound of the event in the room.
 	void make_sound() const;
 	// 3. This function will perform an action on the player.
-	//virtual void action() = 0;
+	virtual void action(Player&, Keyboard&, Grid&) = 0;
 	// =====================
 	// Overloaded operators.
 	// =====================

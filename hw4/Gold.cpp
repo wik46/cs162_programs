@@ -28,6 +28,9 @@
 
 #include "Event.h"
 #include "Gold.h"
+///#include "Player.h"
+//#include "Keyboard.h"
+#include "Grid.h"
 #include <iostream>
 
 // =======================================================================================
@@ -75,6 +78,28 @@
  * 		   it differently.
  * Post-conditions: -
  * ***************************************************************************************/
+void Gold::action(Player& p, Keyboard& k, Grid& grid){
+	// This sets the player's m_has_gold = true.
+	p.pick_up_gold();
+	// Getting the current position.
+	int i = p.get_current_pos().get_x();
+	int j = p.get_current_pos().get_y();
+	// Step 1: Remove the player from his/previous room.
+	// Calculating the previous loaction.
+	int prev_i = k.get_prev_pos().get_x();
+	int prev_j = k.get_prev_pos().get_y();
+	// Step 2: Removing the player from the previous room.
+	// The player is not dynamic memory therefore .remove()
+	// is no accompanyied with delete.
+	grid.get_v()[prev_i][prev_j].remove();
+	// Step 4: Removing the Gold from the Grid.
+	delete grid.get_v()[i][j].remove();
+	// Step 5: Inserting the player into the new empty room.
+	grid.get_v()[i][j].insert( &p );
+					
+	
+	return; 
+}
 
 /* ***************************************************************************************
  * ***************************************************************************************/

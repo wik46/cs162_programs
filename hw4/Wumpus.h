@@ -13,6 +13,10 @@
 #define WUMPUS_H
 
 #include "Event.h"
+#include "Player.h"
+#include "Keyboard.h"
+class Grid;
+
 #include <iostream>
 class Wumpus: public Event{
 	// All these members are defined as the Parent portion.
@@ -56,6 +60,9 @@ public:
 	
 */
 public:
+	// This is a pure virtual function in Event.
+	void action(Player&, Keyboard&, Grid&)override;
+
 	// ==============
 	// Constructors.
 	// ==============

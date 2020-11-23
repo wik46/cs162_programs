@@ -28,6 +28,9 @@
 
 #include "Event.h"
 #include "Bat.h"
+#include "Grid.h"
+//#include "Player.h"
+//#include "Keyboard.h"
 #include <iostream>
 
 // =======================================================================================
@@ -75,6 +78,31 @@
  * 		   it differently.
  * Post-conditions: -
  * ***************************************************************************************/
+void Bat::action(Player& p, Keyboard& k, Grid& grid){
+	std::cout << "I am the bat actions" << std::endl;
+	// First you remove the player from their current room.
+	// Getting the current position.
+	int i = p.get_current_pos().get_x();
+	int j = p.get_current_pos().get_y();
+	// Step 1: Remove the player from his/previous room.
+	// Calculating the previous loaction.
+	int prev_i = k.get_prev_pos().get_x();
+	int prev_j = k.get_prev_pos().get_y();
+	// Step 2: Removing the player from the previous room.
+	// The player is not dynamic memory therefore .remove()
+	// is no accompanyied with delete.
+	grid.get_v()[prev_i][prev_j].remove();
+
+	// This function randomly inserts the player.	
+	grid.insert_player(&p);
+	// YOU NEED TO FIND THE PLAYERS's init pos.
+	std::cout << "Newly inserted: "<< grid.find_pos('$')<< std::endl;
+	Vec2d new_pos = grid.find_pos('$');
+	// Setting the new posistions;
+	p.get_current_pos() = new_pos;
+	k.get_player_pos() = new_pos;
+	return; 
+}
 
 /* ***************************************************************************************
  * ***************************************************************************************/

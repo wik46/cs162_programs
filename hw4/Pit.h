@@ -13,7 +13,11 @@
 #define PIT_H
 
 #include "Event.h"
+#include "Player.h"
+#include "Keyboard.h"
 #include <iostream>
+class Grid;
+
 class Pit: public Event{
 	// All these members are defined as the Parent portion.
 /*
@@ -56,6 +60,8 @@ public:
 	
 */
 public:
+	// This is a pure virtual function in Event.
+	void action(Player&, Keyboard&, Grid&)override;
 	// ==============
 	// Constructors.
 	// ==============

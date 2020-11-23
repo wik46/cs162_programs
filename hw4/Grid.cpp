@@ -286,3 +286,37 @@ Grid::Grid(int n)
  * ***************************************************************************************/
 Grid::~Grid(){}
 
+/* ***************************************************************************************
+ * Function name: find_pos()
+ * Description: THIS FUNCION RETURNS THE VECTORS OF THE SYMBOL
+ * ***************************************************************************************/
+Vec2d Grid::find_pos(char symbol){
+	
+	bool end = false;
+	
+	int i = 1, j = 1;
+	for(i = 0; i < get_v().size(); i++){
+		for(j = 0; j < get_v().size(); j++){
+			if(!get_v()[i][j].is_empty()){
+				if(get_v()[i][j].get_event()->get_symbol() == symbol){
+				std::cout << get_v()[i][j].get_event()->get_symbol() << std::endl;
+					
+					end = true;
+					break;
+				}
+			}
+		}
+		if(end){
+			break;
+		}
+		
+	}
+	// This will return based on the bool = end.
+	if(end){
+		return Vec2d(i,j);
+	}else{
+		// This is the value that will return of no symbol was found.
+		return Vec2d(-1,-1);
+	}
+}
+

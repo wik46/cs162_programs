@@ -108,7 +108,7 @@ const Vec2d& Keyboard::get(Player& p){
  * Pre-condtions: Assumes that get() update the player's current move.
  * Post-conditions: Returns the Vec2d needed for player.move().
  * ***************************************************************************************/
-const Vec2d& Keyboard::dir(){
+const Vec2d/*&*/ Keyboard::dir(){
 	// Part 1: Set the m_shot_dir to indicate that no shot was fired.
 	//m_shot_dir = Vec2d(0,0);
 	// Part 2: If the position of the player is on the boundry of the grid.
@@ -196,7 +196,11 @@ void Keyboard::shoot(Player& p, const std::string& input){
 	return;
 }
 /* ***************************************************************************************
+ * GETTERS AND SETTER:
  * ***************************************************************************************/
+Vec2d& Keyboard::get_player_pos(){return m_player_pos;}
+Vec2d& Keyboard::get_prev_pos(){return m_prev_pos;}
+const Vec2d& Keyboard::get_input(){return m_input;}
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Development helpers: 
@@ -300,7 +304,7 @@ bool Keyboard::is_boundry(const Vec2d& pt){
  * Pre-conditions:
  * Post-conditions: Returns the vector need to pass to .move() in the Player class.
  * */
-const Vec2d& Keyboard::calc_boundry_move(Vec2d& player_pos, const Vec2d& input_pos, int size){
+const Vec2d/*&*/ Keyboard::calc_boundry_move(Vec2d& player_pos, const Vec2d& input_pos, int size){
 	// Remember to check return of local memory.
 	// Case 1: upper row and up.
 	if(player_pos.get_x() == 0 && input_pos == N){
