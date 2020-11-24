@@ -221,7 +221,11 @@ int Zoo::Hospital(int bank_total){
 			<< " - "<< (*this)[i]->get_name() << "- , age "<< (*this)[i]->get_age_months() 
 			<< " has died]." << std::endl;
 			// Animal removed from the Zoo.
+			// ==========================================================================
+			// Bug: The function does not swap the animals so that the sick one is at the
+			// end.
 			swap((*this)[i], (*this)[m_num_animals - 1]);
+			// ==========================================================================
 			--(*this);
 		}
 	}
