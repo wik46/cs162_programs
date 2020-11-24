@@ -263,7 +263,7 @@ void Grid::search_around(const Vec2d& v) {
 Grid::Grid(int n)
 :_2d_Array<Room>(n)
 {
-	std::cout << "Grid constructor" << std::endl;
+	//std::cout << "Grid constructor" << std::endl;
 	// Making sure that the array has at least one element.
 	assert(n > 0 && "[Unable to construct array]: Must have size of at leaste one");	
 	// Setting all the event = null so that they do not contain garbage.

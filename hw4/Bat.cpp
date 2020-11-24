@@ -79,7 +79,7 @@
  * Post-conditions: -
  * ***************************************************************************************/
 void Bat::action(Player& p, Keyboard& k, Grid& grid){
-	std::cout << "I am the bat actions" << std::endl;
+	//std::cout << "I am the bat actions" << std::endl;
 	// First you remove the player from their current room.
 	// Getting the current position.
 	int i = p.get_current_pos().get_x();
@@ -96,7 +96,7 @@ void Bat::action(Player& p, Keyboard& k, Grid& grid){
 	// This function randomly inserts the player.	
 	grid.insert_player(&p);
 	// YOU NEED TO FIND THE PLAYERS's init pos.
-	std::cout << "Newly inserted: "<< grid.find_pos('$')<< std::endl;
+	//std::cout << "Newly inserted: "<< grid.find_pos('$')<< std::endl;
 	Vec2d new_pos = grid.find_pos('$');
 	// Setting the new posistions;
 	p.get_current_pos() = new_pos;

@@ -96,16 +96,18 @@ void Game::print_game_rules(){
 	std::cout << std::endl;
 	std::cout << "\n******************************************************" << std::endl;	
 	std::cout << "Game Rules:" << std::endl;
-	std::cout << "******************************************************\n" << std::endl;	
-	std::cout << "1.) You start of with $ 100 000 in your bank\n    and with an empty zoo.\n\n"
-	<< "2.) You can buy up to two animals per round of the\n     same type.\n\n"
-	<< "3.) Each round baby animals will be born, boom in\n    attendace will occur, one "
-	<< " of you animals will\n    turn ill, or nothing will happen.\n\n"
-	<< "4.) You get to select the food quaility for you \n    animals. Cheap food will be bad for"
-	<< " their health \n    and will increase the probability of geting sick.\n"
-	<< "    Premium food will decrease their chances of \n    turning ill.\n\n"	
-	<< "5.) Lastly enjoy the game!!!\n\n";
-	std::cout << "******************************************************\n" << std::endl;	
+	std::cout << "******************************************************" <<
+	"*******************" << std::endl;	
+	std::cout << "1.) The goal of the game is to find the gold and return\n\n"
+	<< "    from where you came before the WUMPUS finds you."
+	<< "\n\n2.) Be careful, if you fall down a pit, you die.\n\n"
+	<< "3.) Be carefule, there are bats in the cave that can carry\n\n"
+	<<"     you to anywhere inside it.\n\n"
+	<< "4.) You have only three arrows, use them wisely.\n\n"
+	<<"   If you shoot an arrow the Wumpus will wake up."
+	<< "\n\n5.) Lastly, enjoy the game and listen to the adjacent caves for hints.\n\n";
+	std::cout << "********************************************************"
+	<<"******************\n" << std::endl;	
 	std::cout << std::endl;
 	press_enter();
 }
@@ -161,6 +163,120 @@ void Game::Evaluate_round(){
 }
 
 /* **************************************************************************************
+ * Function name: Get_input()
+ * Description: Obtains the input from the user.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
+ * **************************************************************************************/
+void Game::Get_input(){	
+	get_keyboard().get( get_player() );
+	Vec2d dir = get_keyboard().dir(); // NB!! dir() should only run once per round.
+	// This will save the player's previous position in the keyboard.
+	// It is used by the Evalaute_round to remove the player from the
+	// previous room to the new one.
+	if( !(get_keyboard().get_input() == Vec2d(0,0)) ){
+		get_keyboard().get_prev_pos() = get_player().get_current_pos();
+	}
+	// This will move the player to the space that he/she needs to be. 
+	get_player().move(dir);	
+	// Seeing all the members of the classes.
+	if(m_player.get_debug_mode()){	
+		get_keyboard().print_all_info();
+		get_player().print_all_info();
+	}
+	return;
+}			
+/* **************************************************************************************
+ * Function name: move()
+ * Description: Obtains the input from the user.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
+ * **************************************************************************************/
+void Game::move(){
+//	std::cout << "**** THE USER MADE A MOVE ****"<< std::endl;
+	// This is if the user moved to an empty room.
+	int i = get_player().get_current_pos().get_x();
+	int j = get_player().get_current_pos().get_y();
+	if( get_grid().get_v()[i][j].is_empty() ){
+		// Step 1: Remove the player from his/previous room.
+		// Calculating the previous loaction.
+		int prev_i = get_keyboard().get_prev_pos().get_x();
+		int prev_j = get_keyboard().get_prev_pos().get_y();
+		// Step 2: Removing the player from the previous room.
+		// The player is not dynamic memory therefore .remove()
+		// is no accompanyied with delete.
+		get_grid().get_v()[prev_i][prev_j].remove();
+		// Step 3: Inserting the player into the new empty room.
+		get_grid().get_v()[i][j].insert( &get_player() );
+
+	}else{
+		try{
+			get_grid().get_v()[i][j].get_event()->action(get_player(), get_keyboard(), get_grid());
+				
+		}catch(const char* msg){
+				std::cout << std::endl << msg << std::endl << std::endl; 
+				get_game_state() = "finished";
+		}catch(...){
+			std::cout << "***caught last block***" << std::endl;
+			get_game_state() = "finished";
+		}
+	}	
+}	
+/* **************************************************************************************
+ * Function name: shoot()
+ * Description:Simulates the shooting.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
+ * **************************************************************************************/
+void Game::shoot(){			
+		Vec2d current = get_player().get_current_pos();
+		Vec2d dir = get_keyboard().get_shot_dir(); 
+				
+		Vec2d w_pos = find_pos('w');
+		int w_alive = 1;
+		// Now we search untill the arrows hits the wall.
+		do{
+			current = current + dir; 
+			// If the shot fired was accurate.
+			if(current == w_pos){
+				delete get_grid().get_v()[w_pos.get_x()][w_pos.get_y()].remove();
+				std::cout << "You killed the WUMPUS !!!!" << std::endl;
+				w_alive = 0;
+				break;
+			}
+		}while(!get_grid().is_boundry( current , dir));
+		// If the wumpus is not killed he will move.
+		if(w_alive == 1){
+			std::cout << "The Wumpus ran to another cave" << std::endl;	
+			// Move the wumpus here.
+			// Step 1: Get the Wumpus's sleeping area.
+			int i = w_pos.get_x();
+			int j = w_pos.get_y();
+			// Step 2: Remove the Wumpus from its sleeping area.
+			delete get_grid().get_v()[i][j].remove();
+
+			// This function randomly inserts the Wumpus.	
+			int i_e = 0, j_e = 0;
+			do{
+				// Calculate a random space to insert the player.
+				i_e = rand() % (get_grid().get_v().size());
+				j_e = rand() % (get_grid().get_v().size());
+				// Continue searching if the Room is not empty.
+			}while( !get_grid().get_v()[i_e][j_e].is_empty() );// If this room is not empty.	
+	
+			// Inserting the Player instance into the empty room.
+			get_grid().get_v()[i_e][j_e].insert( new Wumpus(get_player().get_debug_mode() )); 
+		}
+}	
+/* **************************************************************************************
+ * Function name: find_pos()
+ * Description: Returns the vector as position.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: -
  * **************************************************************************************/
 
 /// THIS FUNCTION RETURNS TH POS OF A SYMBOL.
@@ -265,4 +381,17 @@ bool validate_input(int& argc, char** argv){
 	}else{
 		return false;
 	}
+}
+/* **************************************************************************************
+ * Function name: validate_input()
+ * Description: The function accepts and intger and a const char* and a bool.
+ * 		If the integer < 4, program ends. If const char* var = "true" || "True",
+ * 		the program is initialized in debug mode.
+ * *************************************************************************************/
+void print_options(){
+	std::cout << std::endl << std::endl;
+	std::cout << "Type: 'new' to play with a new game board."<< std::endl;		
+	std::cout << "Type: 'old' to play with a same game board."<< std::endl;		
+	std::cout << "Type: 'terminated' to end the game."<< std::endl;		
+	return ;
 }

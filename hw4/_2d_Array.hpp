@@ -354,7 +354,7 @@ void _2d_Array<T>::print() const{
 template <typename T>
 _2d_Array<T>::_2d_Array(){
 	// Temporary.
-	std::cout << "Default constructor for the Array." << std::endl;
+//	std::cout << "Default constructor for the Array." << std::endl;
 }
 /* ***************************************************************************************
  * Function name: Array() 
@@ -370,7 +370,7 @@ _2d_Array<T>::_2d_Array(){
 template <typename T>
 _2d_Array<T>::_2d_Array(int n)
 {
-	std::cout << "_2d_Array constructor 2"<< std::endl;
+	//std::cout << "_2d_Array constructor 2"<< std::endl;
 	assert(n > 0 && "[Unable to construct array]: Must have size of at leaste one");	
 	// setting size of the vector for to store the vectors inside.
 	m_array.resize(n);

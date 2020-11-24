@@ -54,7 +54,7 @@
  * Post-conditions: Validates the user input and returns it i.t.o. a vector.
  * ***************************************************************************************/
 const Vec2d& Keyboard::get(Player& p){
-	std::cout << "** Add a space before the direction if you want to fire an arrows."
+	std::cout << "\n\n\n** Add a space before the direction if you want to fire an arrows."
 	<< std::endl;
 	prompt_move();
 	std::string input = "A";

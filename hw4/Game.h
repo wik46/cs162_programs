@@ -62,7 +62,12 @@ public:
 	Keyboard& get_keyboard(); 
 	// 4.
 	std::string& get_game_state();
-
+	// 5. 
+	void Get_input();
+	// 6.
+	void move();
+	// 7.
+	void shoot();
 	// This function is used inside Start_game().
 	void Start_game();
 	void print_game_rules();	
@@ -80,6 +85,7 @@ public:
 // =====================
 void press_enter();		
 bool validate_input(int&, char**);
+void print_options();
 #endif
 
 

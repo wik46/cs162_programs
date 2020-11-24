@@ -79,7 +79,6 @@
  * Post-conditions: -
  * ***************************************************************************************/
 void Pit::action(Player& p, Keyboard& k, Grid& grid){
-	std::cout << "I am the pit actions" << std::endl;
 	// Resetting the arrows.
 	if(p.get_num_arrows() < 3){
 		p.get_num_arrows() = 3;	
@@ -119,7 +118,7 @@ void Pit::action(Player& p, Keyboard& k, Grid& grid){
 	// Resetting previous position of the player.
 	p.get_current_pos() = k.get_prev_pos();
 	k.get_player_pos() = p.get_current_pos();
-	throw "You fall down the pit";
+	throw "***** You fall down the pit *****";
 	return; 
 }
 
