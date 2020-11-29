@@ -35,7 +35,6 @@
 #include <exception>
 template <class T>
 class LinkedList{
-public:
 	// Member 1:
 	unsigned int m_length;
 	// Member 2: Pointer to the first node in the list.
@@ -58,7 +57,10 @@ public:
 	void clear();
 	// 4. This inserts a new node at the index specified. '[0:n-1]'
 	unsigned int insert(T, unsigned int);
-	
+	// 5. This function returns the length of the list.
+	const int get_length() const;
+	// 6. This returns the head of the list.
+	const Node<T>* get_head() const { return m_head;}
 	// ============================================================
 	// Sorting functions functions:
 	// ============================================================
@@ -83,6 +85,7 @@ public:
 	~LinkedList();
 	// 2. Assignment operator overload.
 	// 3. Copy Constructor.
+	LinkedList(const LinkedList<T>& ll);
 };	
 // 1.
 template <typename T>
@@ -290,6 +293,19 @@ unsigned int LinkedList<T>::insert(T val, unsigned int index){
 	}
 	return m_length;
 }
+/* ***************************************************************************************
+ * Function name: get_length()
+ * Description: Returns the lenght of the list.
+ * Parameters: -
+ * Pre-conditions: -
+ * Post-conditions: - 
+ * **************************************************************************************/
+template <class T>
+const int LinkedList<T>::get_length() const{
+	return m_length;
+}
+
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 // Sorting functions functions:
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
@@ -378,6 +394,35 @@ LinkedList<T>::~LinkedList(){
 	this->clear();
 	// Temporary.
 	std::cout << "[~LinkedList() called]"<< std::endl;
+}
+
+// 2. The copy constructor.
+/* ***************************************************************************************
+ * Function name: LinkedList()
+ * Description: This is the copy constructor for the Linked list class. It deep copies
+ * 		all the data value from the node of the list.
+ * Parameters: LinkedList<T>&
+ * Pre-conditions: Assumes that the list is not instantiated yet.
+ * Post-conditions: Returns a list with all the data copied.
+ * **************************************************************************************/	
+template <class T>
+LinkedList<T>::LinkedList(const LinkedList<T>& ll){
+	std::cout << "[LinkedList]: Copy constructor"<< std::endl;
+	// This is needded so that push_back() does a head insert in the begining.
+	this->m_head = NULL;
+	this->m_length = 0;	
+	// Case for the empty list.
+	if( ll.get_length() == 0){
+		return;
+	}else{
+		// This is the start of the node.
+		auto walker = ll.get_head();
+		while(walker->next != NULL){
+			T tmp = walker->val;
+			this->push_back(tmp);		
+			walker = walker->next;
+		}
+	}	
 }
 
 
@@ -644,5 +689,43 @@ void selection_sort(Node<T>** head, bool (*f)(Node<T>* , Node<T>*)){
 	// For a list of two or more nodes.
 	*head = selection_sort(*head, f);
 	
+}
+/* ***************************************************************************************
+ * Function name: sort()
+ * Description: This function accepts the address of a linked list
+ * 		and sorts it based on the integer passed as the second argument.
+ *		1. - merge sort ascending,
+ *		2. - merge sort descending,
+ *		3. - selection sort ascending, and	
+ *		4. - selection sort descending.
+ * Parameters: T, int
+ * Pre-conditions: This function will not sort the integer is not between 1 - 4
+ * 		   inclusively.
+ * Post-conditions: Ths functions sorts the linked list passed as the first argument.
+ * **************************************************************************************/
+template <class T>
+void sort_method(LinkedList<T>* ll, int input){
+	// This function will sort the linked list in 4 different ways.
+	if(input == 1){
+		// Sorts the list using a recursive merge sort algorithm in ascending order.
+		std::cout << "\n** Mergesort: ascending **\n"<< std::endl;
+		ll->merge_sort_ascending();
+	}else if(input == 2){
+		// Sorts the list using a recursive merge sort algorithm in descending order.
+		std::cout << "\n** Mergesort: descending **\n"<< std::endl;
+		ll->merge_sort_descending();
+	}else if(input == 3){
+		// Sorts the list using a selection recursive sort algorithm in ascending order.
+		std::cout << "\n** Selection sort: ascending **\n"<< std::endl;
+		ll->selection_sort_ascending();
+	}else if(input == 4){
+		// Sorts the list using a selection recursive sort algorithm in descending order.
+		std::cout << "\n** Selection sort: descending **\n"<< std::endl;
+		ll->selection_sort_descending();
+	}else{
+		std::cout << "\n** You need to enter an integer 1 - 4 to select a sorting method"
+		<< std::endl << std::endl;
+	}
+	return;
 }
 #endif

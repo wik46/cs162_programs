@@ -25,6 +25,7 @@
  * 				node specified.
  * **************************************************************************************/
 
+#include "Functions.h"
 #include "LinkedList.hpp"
 #include "Node.hpp"
 #include <iostream>
@@ -33,91 +34,89 @@
 #include <exception>
 
 int main(int argc, char** argv){
-	
 
-	try{
-		// This is just to help with the testing of the program
-		std::string tmp = argv[1];
-		argc = std::stoi( tmp ); 
-	}catch(std::exception a){
-		// Using the standard excpetions class.
-		std::cout << a.what() << std::endl;
-		std::cout << "[remember the size of the list as com arg]"<< std::endl;
-		return -1;
-	}
+	// Declaring data used by the user.	
+	LinkedList<int>* ll = new LinkedList<int>;
 	// Seeding the random number generator.
 	srand(time(NULL));
 	// ==================================
 	// Start of the Linked list testing.
 	// ==================================
-
-	LinkedList<int> ll;
-	ll.push_front(13);
-	ll.push_back(12);
-	ll.push_front(-123238);
-	ll.push_front(113);
-	ll.push_front(-111);
-	ll.push_front(1123230);
-
-	// Gets a memory leak when execeuted.
-	// ========
-	if( *(ll.m_head) <= *(ll.m_head->next)){
-		std::cout << "Node at m_head <= node at m_head->next "<< std::endl;
-
-	}
-	for(int i = 0; i < argc; i++){
-		int tmp = rand() % 100;
-		ll.insert( tmp, i );
-		ll.push_front(tmp + i);
-	}
+	do{
+		// 1. This displays all the options that the user has to manipulate
+		// 	the data inside the linked list.
+		print_all_info();
+		
+		// 2. Display current list.
+		ll->print();
+		
+		// 3. This gets the input from the user. get() returns any int
+		// 	but entered by the user and does error-handeling on other
+		// 	data types.
+		// Obtaining input.
+		int input = get_int("Enter 1 - 6 here: ", "");
 	
-	ll.print();
-	// ** ** //	
-	std::cout << "====================" << std::endl;
-	std::cout << "Ascending order (m):" << std::endl;
-	std::cout << "====================" << std::endl;
-	// Sorting occurs here.
-
-	ll.merge_sort_ascending();
-	ll.print();
-	std::cout << "====================" << std::endl;
-	std::cout << std::endl;
-	// ** ** //	
-	std::cout << "=====================" << std::endl;
-	std::cout << "Descending order(m):" << std::endl;
-	std::cout << "=====================" << std::endl;
-	ll.merge_sort_descending();
-	ll.print();
-	
-	std::cout << "=====================" << std::endl;
-	
-	std::cout << std::endl;
-	std::cout << std::endl;
-	// ** ** //	
-	std::cout << "====================" << std::endl;
-	std::cout << "Ascending order (s):" << std::endl;
-	std::cout << "====================" << std::endl;
-	// Sorting occurs here.
-	ll.selection_sort_ascending();
-	ll.print();
-	std::cout << "====================" << std::endl;
-	std::cout << std::endl;
-	// ** ** //	
-	std::cout << "=====================" << std::endl;
-	std::cout << "Descending order(s):" << std::endl;
-	std::cout << "=====================" << std::endl;
-	ll.selection_sort_descending();
-	ll.print();
-	std::cout << "=====================" << std::endl;
-	
-	
-	std::cout << std::endl;
-	
-	// This function free's all the memory used by the program and should be used 
-	// 	by the destructor.
-	//ll.clear();
-	
-	//ll.print();
+		switch (input){
+			// A. Inserting one instance of data in the front.
+			case 1:{
+				std::string msg = "Enter the number to insert at the head of the list";
+				int result = get_int(msg,"Error msg");
+				ll->push_front(result);	
+				break;
+			}
+			// B. Insert one instance of data at the back.
+			case 2:{	
+				std::string msg = "Enter the number to insert at the tail of the list";
+				int result = get_int(msg,"");
+				ll->push_back(result);	
+				break;
+			}
+			// C. Add an x amount of random data.
+			case 3:{
+				std::string msg = "Enter the number of random variables for the list";
+				int result = get_int(msg,"[error]: must be > 0.");
+				for(int i = 0; i < result; i++){
+					ll->push_back( rand() % 100);
+				}
+				break;
+			}
+			// D. Sort the lists.( 4 different ways)
+			case 4:{
+				std::string msg = "1-Merge, a\n2-Merge, d\n3-Selection, a\n4-Selection, d";
+				int result = get_int(msg, "");
+				// 1. - merge sort ascending,
+				// 2. - merge sort descending,
+				// 3. - selection sort ascending, and
+				// 4. - selection sort descending.
+				sort_method( ll ,result );
+				break;
+			}
+			// E. Clear all the data from the list.
+			case 5:{
+				ll->clear();
+				break;
+			}
+			// F. Clear all the data from the list.
+			case 6:{
+				std::cout << "Are you sure you want to exit? - ('exit' to confirm): ";
+				std::cin >> argv[0];	
+				break;
+			}
+			// G. The user did not enter a valid integer.
+			default:{
+				std::cout << std::endl << 
+				"** Please enter an integer 1 - 6.** " << std::endl;
+				break;
+			}
+		}	
+		std::cout << std::endl;
+		
+		
+	}while(argv[0][0] != 'e');
+	// Print out a goodbye message.		
+	std::cout << "\n\n ** Goodbey! ** \n\n" << std::endl;
+	// Freeing up the memory used by the containers.
+	delete ll;
 	
 	return 0;
 }

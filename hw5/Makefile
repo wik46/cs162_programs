@@ -9,11 +9,14 @@ GCC = g++
 GCCFLAGS = -std=c++11 -g -Wall
 
 # Targets
-$(EXE_FILE): main.o LinkedList.hpp Node.hpp
-	$(GCC) $(GCCFLAGS) main.o -o $(EXE_FILE)
+$(EXE_FILE): main.o Functions.o LinkedList.hpp Node.hpp
+	$(GCC) $(GCCFLAGS) main.o Functions.o -o $(EXE_FILE)
 
 main.o: main.cpp LinkedList.hpp Node.hpp
 	$(GCC) $(GCCFLAGS) -c main.cpp
+
+Functions.o: Functions.cpp Functions.h
+	$(GCC) $(GCCFLAGS) -c Functions.cpp
 clean: 
 	rm -f *.out *.o $(EXE_FILE)
 author:
